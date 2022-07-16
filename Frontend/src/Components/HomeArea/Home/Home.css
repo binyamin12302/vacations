@@ -1,0 +1,14 @@
+.Home {
+  height: 100%;
+}
+
+.Home .adm .btn {
+  margin-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
+  justify-content: center;
+}
+
+.Home .btn-vac:active {
+  padding: 0.330rem 0.70rem;
+}
