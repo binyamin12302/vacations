@@ -18,7 +18,7 @@ class DevelopmentConfig extends Config {
   public unfollowVacationUrl = "http://localhost:3001/api/auth/unfollow/";
 }
 
-// https://vacation-project-binyamin.herokuapp.com/
+
 
 class ProductionConfig extends Config {
   public port = "https://vacation-project-binyamin.herokuapp.com"

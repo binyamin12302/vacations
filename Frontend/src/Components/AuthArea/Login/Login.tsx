@@ -26,24 +26,19 @@ function Login(): JSX.Element {
         }
     }
 
-
     return (
         <div className="Login d-flex justify-content-center container" >
             <Form className="form border  rounded bg-light  p-4  shadow" onSubmit={handleSubmit(send)}>
-
                 <h3 className="mb-4 text-center">Login</h3>
-
                 <Form.Group className="mb-4" >
                     <Form.Label>Username</Form.Label>
                     <Form.Control placeholder="Enter username" isInvalid={!!formState.errors.username}
                         {...register("username", {
                             required: { value: true, message: "Missing username" }
                         })} />
-
                     <Form.Control.Feedback type="invalid">
                         {formState.errors.username?.message}
                     </Form.Control.Feedback>
-
                 </Form.Group>
 
                 <Form.Group className="mb-4" controlId="formBasicPassword">

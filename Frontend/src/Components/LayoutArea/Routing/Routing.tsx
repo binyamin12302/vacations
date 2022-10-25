@@ -7,6 +7,7 @@ import Logout from "../../AuthArea/Logout/Logout";
 import Register from "../../AuthArea/Register/Register";
 import Chart from "../../HomeArea/Chart/Chart";
 import Home from "../../HomeArea/Home/Home";
+import HomeGuest from "../../HomeArea/HomeGuest/HomeGuest";
 import PageNotFound from "../PageNotFound/PageNotFound";
 
 function Routing(): JSX.Element {
@@ -48,6 +49,7 @@ function Routing(): JSX.Element {
                         <Route path="/register" element={<Register />} />
                         <Route path="/" element={<Login />} />
                         <Route path="" element={<Navigate to="/" />} />
+                        <Route path="/home" element={<HomeGuest />} />
                     </>
                 }
 
