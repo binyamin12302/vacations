@@ -1,5 +1,5 @@
 
-# Vacation Project 
+# Vacations Project 
 
 The vacation website allows you to open an account, 
 after opening the account you can see all 
