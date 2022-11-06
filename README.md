@@ -2,7 +2,8 @@
 # Vacation Project 
 
 The vacation website allows you to open an account, 
-after opening the account you can see all the vacations on the website.
+after opening the account you can see all 
+the vacations on the website. 
 There are two types of accounts.
 
 - User: follow\unfollow vacations.
