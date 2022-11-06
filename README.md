@@ -1,8 +1,8 @@
 
 # Vacation Project 
 
-The vacation site allows you to open an account and
-vacations can only be viewed by registered users.
+The vacation site allows you to open an account, after opening 
+the account you can see all the vacations on the website.
 The site has two types of accounts.
 
 - User: follow\unfollow vacations.
