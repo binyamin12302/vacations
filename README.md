@@ -1,5 +1,5 @@
 
-# Project Title
+# Vacation Project 
 
 The vacation site allows you to open an account and
 vacations can only be viewed by registered users.
@@ -15,7 +15,7 @@ The site has two types of accounts.
 
 ## Installation
 
-Install my-project with npm
+Install Vacation project with npm
 
 --Frontend---
 ```bash
