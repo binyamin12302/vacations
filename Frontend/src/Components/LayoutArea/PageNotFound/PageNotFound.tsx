@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+
 
 function PageNotFound(): JSX.Element {
     return (
@@ -10,7 +10,6 @@ function PageNotFound(): JSX.Element {
                 <p className="lead">
                     The page you’re looking for doesn’t exist.
                 </p>
-                <NavLink to={"/"}  className="btn btn-primary">Go Home</NavLink>
             </div>
         </div>
 

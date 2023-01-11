@@ -12,19 +12,13 @@ import PageNotFound from "../PageNotFound/PageNotFound";
 
 function Routing(): JSX.Element {
 
-
-    const [user, setUser] = useState<boolean>(false);
     const [admin, setAdmin] = useState<boolean>(false);
-
 
     useEffect(() => {
 
-        setUser(authService.isLoggedIn());
         setAdmin(authService.isUserAdmin());
 
-
         const unsubscribe = store.subscribe(() => {
-            setUser(authService.isLoggedIn());
             setAdmin(authService.isUserAdmin());
         });
 
@@ -33,12 +27,14 @@ function Routing(): JSX.Element {
 
 
 
+
     return (
         <div className="Routing">
 
             <Routes>
+                <Route path="*" element={<PageNotFound />} />
 
-                {user ?
+                {localStorage.getItem("token") ?
                     <>
                         <Route path="/logout" element={<Logout />} />
                         <Route path="/" element={<Home />} />
@@ -47,14 +43,12 @@ function Routing(): JSX.Element {
                     :
                     <>
                         <Route path="/register" element={<Register />} />
-                        <Route path="/" element={<Login />} />
-                        <Route path="" element={<Navigate to="/" />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/" element={<Navigate to="/home" />} />
                         <Route path="/home" element={<HomeGuest />} />
                     </>
                 }
 
-
-                <Route path="*" element={<PageNotFound />} />
 
                 {admin && <Route path="/chart" element={<Chart />} />}
 

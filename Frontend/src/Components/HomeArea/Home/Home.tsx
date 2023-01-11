@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Modal, Row } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import FollowModel from "../../../Models/FollowModel";
 import VacationModel from "../../../Models/VacationModel";
 import store from "../../../Redux/Store";
@@ -8,7 +8,7 @@ import { fetchVacationsAction } from "../../../Redux/VacationsState";
 import authService from "../../../Services/AuthService";
 import socketService from "../../../Services/SocketService";
 import vacationsService from "../../../Services/VacationsService";
-import Pagination from "../../SharedArea/Pagination/Pagination";
+// import Pagination from "../../SharedArea/Pagination/Pagination";
 import AddVacation from "../../VacationsArea/AddVacation/AddVacation";
 import VacationCard from "../../VacationsArea/VacationCard/VacationCard";
 
@@ -20,10 +20,15 @@ function Home(): JSX.Element {
     const [showModalAddVacation, setModalAddVacation] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [vacationsPerPage] = useState<number>(10);
+    const navigate = useNavigate();
+
 
 
     const handleCloseModalAddVacation = () => setModalAddVacation(false);
     const handleShowModalAddVacation = () => setModalAddVacation(true);
+
+
+   
 
     useEffect(() => {
 
@@ -51,6 +56,11 @@ function Home(): JSX.Element {
         };
 
     }, [])
+
+
+  
+
+
 
 
 
@@ -85,7 +95,7 @@ function Home(): JSX.Element {
 
 
     // Change page
-    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
 
     return (
@@ -119,10 +129,10 @@ function Home(): JSX.Element {
             </Row>
 
 
-            <ul className="pagination d-flex justify-content-center m-1" >
+            {/* <ul className="pagination d-flex justify-content-center m-1" >
                 <Pagination vacationsPerPage={vacationsPerPage} totalVacations={vacations.length}
                     paginate={paginate} />
-            </ul>
+            </ul> */}
 
         </Container>
     );

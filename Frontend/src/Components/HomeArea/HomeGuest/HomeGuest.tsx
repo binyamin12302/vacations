@@ -173,17 +173,6 @@ function HomeGuest(): JSX.Element {
                 </div>
             </section>
 
-
-
-            <section id="quote" className=" bg-parlex">
-                <div className=" parlex-back">
-                    <div className="container secPad text-center">
-                        <h2>"The World is a book, and those who do not travel read only a page."
-                        </h2><h3>-Saint Augustine</h3>
-                    </div>
-                </div>
-            </section>
-
         </div>
     );
 }

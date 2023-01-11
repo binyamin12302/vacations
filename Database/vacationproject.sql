@@ -20,8 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Database: `vacationproject`
 --
-CREATE DATABASE IF NOT EXISTS `vacationproject` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `vacationproject`;
+
 
 -- --------------------------------------------------------
 

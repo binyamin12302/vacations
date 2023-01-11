@@ -8,10 +8,13 @@ function Logout(): JSX.Element {
     const navigate = useNavigate();
 
     useEffect(() => {
+
+        navigate("/home");
+
         try {
             authService.logout();
             socketService.disconnect();
-            navigate("/");
+
         }
         catch (err: any) {
             console.log(err.message);

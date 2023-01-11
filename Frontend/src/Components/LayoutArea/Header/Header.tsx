@@ -44,7 +44,7 @@ function Header(): JSX.Element {
                 </> :
                     <>
                         <NavLink className="nav-link text-dark p-1" to="/home">Home |</NavLink>
-                        <NavLink className="nav-link text-success p-1" to="/">Login |</NavLink>
+                        <NavLink className="nav-link text-success p-1" to="/login">Login |</NavLink>
                         <NavLink className="nav-link p-1" to="/register">Register </NavLink>
                     </>
                 }

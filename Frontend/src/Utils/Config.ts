@@ -21,13 +21,13 @@ class DevelopmentConfig extends Config {
 
 
 class ProductionConfig extends Config {
-  public port = "https://vacation-project-binyamin.herokuapp.com"
-  public registerUrl = "https://vacation-project-binyamin.herokuapp.com/api/auth/register/";
-  public loginUrl = "https://vacation-project-binyamin.herokuapp.com/api/auth/login/";
-  public vacationUrl = "https://vacation-project-binyamin.herokuapp.com:/api/vacations/";
-  public vacationImageUrl = "https://vacation-project-binyamin.herokuapp.com/api/vacations/images/";
-  public followVacationUrl = "https://vacation-project-binyamin.herokuapp.com/api/auth/follow/";
-  public unfollowVacationUrl = "https://vacation-project-binyamin.herokuapp.com/api/auth/unfollow/";
+  public port = "https://vacations-bin.herokuapp.com/"
+  public registerUrl = "https://vacations-bin.herokuapp.com/api/auth/register/";
+  public loginUrl = "https://vacations-bin.herokuapp.com/api/auth/login/";
+  public vacationUrl = "https://vacations-bin.herokuapp.com//api/vacations/";
+  public vacationImageUrl = "https://vacations-bin.herokuapp.com/api/vacations/images/";
+  public followVacationUrl = "https://vacations-bin.herokuapp.com/api/auth/follow/";
+  public unfollowVacationUrl = "https://vacations-bin.herokuapp.com/api/auth/unfollow/";
 }
 
 
