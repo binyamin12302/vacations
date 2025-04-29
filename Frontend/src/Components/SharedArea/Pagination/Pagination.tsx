@@ -1,42 +1,63 @@
-import { NavLink } from "react-bootstrap";
 import "./Pagination.css";
 
-
-interface VacationPagination {
-    vacationsPerPage: number,
-    totalVacations: number,
-    paginate: Function
+interface VacationPaginationProps {
+    vacationsPerPage: number;
+    totalVacations: number;
+    paginate: (pageNumber: number) => void;
+    currentPage: number;
 }
 
-
-function Pagination(props: VacationPagination): JSX.Element {
+function Pagination(props: VacationPaginationProps): JSX.Element {
 
     const pageNumbers = [];
 
-    for (let i = 1; i <= Math.ceil(props.totalVacations / props.vacationsPerPage); i++) {
+    const totalPages = Math.ceil(props.totalVacations / props.vacationsPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
     }
 
+    const handlePrev = () => {
+        if (props.currentPage > 1) {
+            props.paginate(props.currentPage - 1);
+        }
+    };
+
+    const handleNext = () => {
+        if (props.currentPage < totalPages) {
+            props.paginate(props.currentPage + 1);
+        }
+    };
+
     return (
-        <>
+        <nav aria-label="Page navigation">
+            <ul className="pagination justify-content-center">
 
-            {
-                pageNumbers.map((number) => (
-                        <li key={number} className='page-item  border' >
-                            <nav aria-label="Page navigation example ">
-                                <ul className="pagination">
-                                    <NavLink onClick={() => props.paginate(number)} className="page-link  active">
-                                        {number}
-                                    </NavLink>
-                                </ul>
-                            </nav>
-                        </li>
-                ))
-            }
+                {/* Previous Button */}
+                <li className={`page-item ${props.currentPage === 1 ? "disabled" : ""}`}>
+                    <button onClick={handlePrev} className="page-link">
+                        Previous
+                    </button>
+                </li>
 
-        </>
+                {/* Page Numbers */}
+                {pageNumbers.map(number => (
+                    <li key={number} className={`page-item ${props.currentPage === number ? "active" : ""}`}>
+                        <button onClick={() => props.paginate(number)} className="page-link">
+                            {number}
+                        </button>
+                    </li>
+                ))}
 
+                {/* Next Button */}
+                <li className={`page-item ${props.currentPage === totalPages ? "disabled" : ""}`}>
+                    <button onClick={handleNext} className="page-link">
+                        Next
+                    </button>
+                </li>
 
+            </ul>
+        </nav>
     );
 }
 

@@ -32,6 +32,8 @@ router.post("/vacations",verifyAdmin, async (request: Request, response: Respons
   try {
     // Take image from request into the body: 
     request.body.image = request.files?.image;
+
+    console.log(request.body.image);
     const vacation = new VacationModel(request.body);
     const addedVacation = await logic.addVacation(vacation);
 

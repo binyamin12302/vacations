@@ -25,60 +25,55 @@ class VacationModel {
     this.price = vacation.price;
   }
 
+  // Validation Schemas:
+  private static postValidationSchema = Joi.object({
+    id: Joi.forbidden(),
+    description: Joi.string().required().min(5).max(90),
+    destination: Joi.string().required().min(2).max(30),
+    imageName: Joi.string().min(10).max(255),
+    startDate: Joi.date().required(),
+    endDate: Joi.date().required(),
+    price: Joi.number().required().min(100).max(10000),
+    image: Joi.required()
+  });
 
   private static putValidationSchema = Joi.object({
     id: Joi.number().required().integer().min(1),
-    description: Joi.string().required().min(10).max(70),
+    description: Joi.string().required().min(5).max(90),
     destination: Joi.string().required().min(2).max(30),
-    imageName: Joi.string().min(10).max(40),
+    imageName: Joi.string().min(10).max(255),
     startDate: Joi.date().required(),
     endDate: Joi.date().required(),
-    price: Joi.number().required().min(0).max(1000),
+    price: Joi.number().required().min(100).max(10000),
     image: Joi.optional()
   });
 
   private static patchValidationSchema = Joi.object({
     id: Joi.number().required().integer().min(1),
-    description: Joi.string().optional().min(10).max(70),
+    description: Joi.string().optional().min(5).max(90),
     destination: Joi.string().optional().min(2).max(30),
-    imageName: Joi.string().max(40),
+    imageName: Joi.string().min(10).max(255),
     startDate: Joi.date().optional(),
     endDate: Joi.date().optional(),
-    price: Joi.number().optional().min(0).max(1000),
+    price: Joi.number().optional().min(100).max(10000),
     image: Joi.optional()
   });
 
-
-  private static postValidationSchema = Joi.object({
-    id: Joi.forbidden(),
-    description: Joi.string().required().min(5).max(90),
-    destination: Joi.string().required().min(0).max(30),
-    imageName: Joi.string().max(40),
-    startDate: Joi.date().required(),
-    endDate: Joi.date().required(),
-    price: Joi.number().required().min(0).max(1000),
-    image: Joi.required()
-  });
-
+  // Validation Methods:
+  public validatePost(): string {
+    const result = VacationModel.postValidationSchema.validate(this);
+    return result.error?.message;
+  }
 
   public validatePut(): string {
     const result = VacationModel.putValidationSchema.validate(this);
     return result.error?.message;
-  };
-
-
-  public validatePost(): string {
-    const result = VacationModel.postValidationSchema.validate(this);
-    return result.error?.message;
-  };
+  }
 
   public validatePatch(): string {
     const result = VacationModel.patchValidationSchema.validate(this);
     return result.error?.message;
-  };
-
-
+  }
 }
-
 
 export default VacationModel;

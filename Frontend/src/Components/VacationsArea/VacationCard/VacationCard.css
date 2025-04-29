@@ -1,5 +1,30 @@
- .btn:active {
-   outline-style: none;
-   border: none;
- }
+.VacationCard .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
+.VacationCard .card-img-top {
+  height: 180px;
+  object-fit: cover;
+}
+
+.VacationCard .card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.VacationCard .card-text {
+  flex-grow: 1;
+  overflow: auto;
+  max-height: 100px; 
+  margin-bottom: 0.5rem;
+}
+
+.VacationCard .badge {
+  margin-bottom: 0.5rem;
+}

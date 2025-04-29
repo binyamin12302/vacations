@@ -44,7 +44,18 @@ async function addVacation(vacation: VacationModel): Promise<VacationModel> {
     vacation.imageName = uuid() + extension;
 
     // Save in disk: 
-    await vacation.image.mv("./src/1-assets/images/" + vacation.imageName);
+    await new Promise<void>((resolve, reject) => {
+      vacation.image.mv("./src/1-assets/images/" + vacation.imageName, (err) => {
+          if (err) {
+              console.error("Error saving file:", err);
+              reject(new ValidationError("Failed to save uploaded file."));
+              return;
+          }
+          console.log("File saved successfully!");
+          resolve();
+      });
+  });
+  
 
     // Don't return back image file: 
     delete vacation.image;
@@ -132,43 +143,57 @@ async function updatePartialVacation(vacation: VacationModel): Promise<VacationM
 
   const errors = vacation.validatePatch();
   if (errors) {
-    throw new ValidationError(errors);
+      throw new ValidationError(errors);
   }
 
-  const previousImage = await getPreviousImage(vacation.id);
+  const previousVacation = await getOneVacation(vacation.id);
 
-  const dbVacation = await getOneVacation(vacation.id);
-
-
+ 
   if (vacation.image) {
+      const dotIndex = vacation.image.name.lastIndexOf(".");
+      const extension = vacation.image.name.substring(dotIndex);
+      vacation.imageName = uuid() + extension;
 
-    const dotIndex = vacation.image.name.lastIndexOf(".");
-    const extension = vacation.image.name.substring(dotIndex);
-    vacation.imageName = uuid() + extension;
+      await vacation.image.mv("./src/1-assets/images/" + vacation.imageName);
 
-
-    // Save in disk: 
-    await vacation.image.mv("./src/1-assets/images/" + vacation.imageName);
-
-    if (previousImage) {
-      await fs.unlink('./src/1-assets/images/' + previousImage);
-    }
-
-    // Don't return back image file: 
-    delete vacation.image;
+      if (previousVacation.imageName) {
+          await fs.unlink('./src/1-assets/images/' + previousVacation.imageName);
+      }
+  } else {
+      vacation.imageName = previousVacation.imageName;
   }
 
-  for (const prop in dbVacation) {
-    if (vacation[prop] !== undefined) {
-      dbVacation[prop] = vacation[prop];
+  const values = [];
+  const fieldsToUpdate = [];
+
+  const fields = ["description", "destination", "startDate", "endDate", "price", "imageName"];
+
+for (const field of fields) {
+    if (vacation[field] !== undefined) {
+        fieldsToUpdate.push(`${field} = ?`);
+        values.push(vacation[field]);
     }
-  }
-
-
-
-  const updatedProduct = await updateFullVacation(new VacationModel(dbVacation));
-  return updatedProduct;
 }
+
+  const sql = `
+      UPDATE vacations
+      SET ${fieldsToUpdate.join(", ")}
+      WHERE vacationId = ?
+  `;
+  values.push(vacation.id); 
+
+  const result: OkPacket = await dal.execute(sql, values);
+
+  if (result.affectedRows === 0) {
+      throw new ResourceNotFoundError(vacation.id);
+  }
+
+  const updatedVacation = await getOneVacation(vacation.id);
+  socketLogic.reportUpdateVacation(updatedVacation);
+
+  return updatedVacation;
+}
+
 
 
 async function deleteVacation(id: number): Promise<void> {

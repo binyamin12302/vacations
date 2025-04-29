@@ -4,3 +4,4 @@ CLOUDINARYSECRET=QxE_GPSuc2__U6yajUqTS2KRgDM
 
 # dependencies
 /node_modules
+.env

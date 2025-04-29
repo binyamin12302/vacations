@@ -28,11 +28,14 @@ class UserModel {
     lastName: Joi.string().required().min(2).max(30),
     username: Joi.string().min(8).max(40).required(),
     password: joiPassword.string()
-      .minOfLowercase(2)
-      .minOfUppercase(2)
-      .minOfNumeric(2)
-      .noWhiteSpaces()
-      .required(),
+    .min(8)                
+    .max(30)                
+    .minOfLowercase(2)      
+    .minOfUppercase(2)      
+    .minOfNumeric(2)        
+    .minOfSpecialCharacters(1) 
+    .noWhiteSpaces()      
+    .required(),
       roleId: Joi.forbidden()
   });
 

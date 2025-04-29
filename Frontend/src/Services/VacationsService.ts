@@ -37,6 +37,8 @@ class VacationsService {
     formData.append("price", vacation.price.toString());
     formData.append("image", vacation.image?.item(0));
 
+    console.log("FormData:", vacation.description);
+
     const response = await axios.post<VacationModel>(config.vacationUrl, formData);
     
     const addedVacation = response.data;
@@ -56,8 +58,6 @@ class VacationsService {
     formData.append("startDate", vacation.startDate);
     formData.append("endDate", vacation.endDate);
     formData.append("price", vacation.price.toString()); 
-
-
     formData.append("image", vacation.image.item(0));
 
 

@@ -87,19 +87,15 @@ function Register(): JSX.Element {
                         isInvalid={!!formState.errors.password}
                         {...register("password", {
                             required: { value: true, message: "Missing password" },
-                            min: { value: 8, message: "Password too short" },
+                            minLength: { value: 8, message: "Password must be at least 8 characters long" },
+                            maxLength: { value: 30, message: "Password must not exceed 30 characters" },
                             pattern: {
-                                value: /(?=.*\d){2}(?=.*[A-Z]){2}(?=.*[a-z]){2}^\S*$/,
-                                message: "Invalid password"
+                                value: /^(?=(?:.*[a-z]){2,})(?=(?:.*[A-Z]){2,})(?=(?:.*\d){2,})(?=.*[\W_])(?!.*\s).*$/,
+                                message: "Password must contain at least 2 lowercase letters, 2 uppercase letters, 2 numbers, 1 special character, and no spaces."
                             }
                         })} />
 
 
-                    <Form.Text id="passwordHelpBlock" muted>
-                        Your password must contain at least 2 lowercase, 2 uppercase,
-                        2 numbers and
-                        must not contain spaces.
-                    </Form.Text>
 
                     <Form.Control.Feedback type="invalid">
                         {formState.errors.password?.message}
