@@ -1,26 +1,25 @@
+import { uploadImage, deleteImage } from "./upload-logic";
 import { OkPacket } from "mysql";
 import dal from "../2-utils/dal";
 import VacationModel from "../4-models/vacation-model";
-import { v4 as uuid } from "uuid";
 import { ResourceNotFoundError, ValidationError } from "../4-models/errors-model";
-import fs from "fs/promises";
 import socketLogic from "./socket-logic";
 
-
-// Get all vacations: 
+// Get all vacations:
 async function getAllVacations(userId: number): Promise<VacationModel[]> {
-
   const sql = `SELECT 
-              v.vacationId as id,v.destination, v.description, v.imageName,  v.startDate,
-              v.endDate , v.price,
-              (CASE WHEN followers.vacationId IS NULL THEN "Follow"  ELSE "Unfollow" END) as 'followState',
-              (CASE WHEN f_v.followers IS NOT NULL THEN f_v.followers ELSE 0 END ) AS 'followers'
+              v.vacationId as id, v.destination, v.description, v.imageName, v.startDate,
+              v.endDate, v.price,
+              (CASE WHEN followers.vacationId IS NULL THEN "Follow" ELSE "Unfollow" END) AS followState,
+              (CASE WHEN f_v.followers IS NOT NULL THEN f_v.followers ELSE 0 END) AS followers
               FROM vacations v
-              LEFT JOIN (SELECT followers.vacationId FROM followers WHERE followers.userId = ${userId}) 
-              followers ON v.vacationId = followers.vacationId
-              LEFT JOIN (SELECT  followers.vacationId, 
-              COUNT(followers.vacationId) AS 'followers' FROM 
-              followers GROUP BY followers.vacationId) AS f_v ON v.vacationId = f_v.vacationId`;
+              LEFT JOIN (SELECT vacationId FROM followers WHERE userId = ${userId}) followers
+              ON v.vacationId = followers.vacationId
+              LEFT JOIN (
+                SELECT vacationId, COUNT(vacationId) AS followers
+                FROM followers
+                GROUP BY vacationId
+              ) AS f_v ON v.vacationId = f_v.vacationId`;
 
   const vacations = await dal.execute(sql);
 
@@ -32,40 +31,27 @@ async function getAllVacations(userId: number): Promise<VacationModel[]> {
 
 // Add one vacation:
 async function addVacation(vacation: VacationModel): Promise<VacationModel> {
-
   const errors = vacation.validatePost();
-
   if (errors) throw new ValidationError(errors);
 
-
   if (vacation.image) {
-    const dotIndex = vacation.image.name.lastIndexOf(".");
-    const extension = vacation.image.name.substring(dotIndex);
-    vacation.imageName = uuid() + extension;
-
-    // Save in disk: 
-    await new Promise<void>((resolve, reject) => {
-      vacation.image.mv("./src/1-assets/images/" + vacation.imageName, (err) => {
-          if (err) {
-              console.error("Error saving file:", err);
-              reject(new ValidationError("Failed to save uploaded file."));
-              return;
-          }
-          console.log("File saved successfully!");
-          resolve();
-      });
-  });
-  
-
-    // Don't return back image file: 
+    const file = vacation.image;
+    const filePath = file.tempFilePath || file.name;
+    vacation.imageName = await uploadImage(filePath);
     delete vacation.image;
   }
 
-  const sql = `INSERT INTO vacations (description,destination,imageName,startDate,endDate,price)
-               VALUES(?,?,?,?,?,?)`;
+  const sql = `INSERT INTO vacations (description, destination, imageName, startDate, endDate, price)
+               VALUES (?, ?, ?, ?, ?, ?)`;
 
-  const values = [vacation.description, vacation.destination, vacation.imageName,
-  vacation.startDate, vacation.endDate, vacation.price]
+  const values = [
+    vacation.description,
+    vacation.destination,
+    vacation.imageName,
+    vacation.startDate,
+    vacation.endDate,
+    vacation.price
+  ];
 
   const result: OkPacket = await dal.execute(sql, values);
   vacation.id = result.insertId;
@@ -75,92 +61,78 @@ async function addVacation(vacation: VacationModel): Promise<VacationModel> {
   return vacation;
 }
 
+// Get one vacation:
+async function getOneVacation(id: number): Promise<VacationModel> {
+  const sql = `SELECT vacationId AS id, destination, description, imageName, startDate, endDate, price
+               FROM vacations WHERE vacationId = ${id}`;
 
+  const vacations = await dal.execute(sql);
+  const vacation = vacations[0];
+  if (!vacation) throw new ResourceNotFoundError(id);
+
+  return vacation;
+}
 
 async function getPreviousImage(id: number): Promise<string> {
-  const sql = `SELECT  imageName
-    FROM vacations  WHERE vacationId = ${id}`
+  const sql = `SELECT imageName FROM vacations WHERE vacationId = ${id}`;
   const image = await dal.execute(sql);
-
-  
   return image[0].imageName;
 }
 
-
+// Update full vacation:
 async function updateFullVacation(vacation: VacationModel): Promise<VacationModel> {
-
-  // validate ----------- 
   const errors = vacation.validatePut();
+  if (errors) throw new ValidationError(errors);
 
-  if (errors) {
-    throw new ValidationError(errors);
+  if (vacation.image) {
+    const file = vacation.image;
+    const filePath = file.tempFilePath || file.name;
+    vacation.imageName = await uploadImage(filePath);
+    delete vacation.image;
   }
 
-
-
   const sql = `UPDATE vacations SET
-              description = ?,
-              destination = ?,
-              imageName  = ?,
-              startDate  = ?,
-              endDate  = ?,
-              price  = ? 
-              WHERE vacationId = ?`
+              description = ?, destination = ?, imageName = ?, startDate = ?, endDate = ?, price = ?
+              WHERE vacationId = ?`;
 
+  const values = [
+    vacation.description,
+    vacation.destination,
+    vacation.imageName,
+    vacation.startDate,
+    vacation.endDate,
+    vacation.price,
+    vacation.id
+  ];
 
-  const values = [vacation.description, vacation.destination, vacation.imageName, vacation.startDate,
-  vacation.endDate, vacation.price, vacation.id]
   const result: OkPacket = await dal.execute(sql, values);
-
-
 
   socketLogic.reportUpdateVacation(vacation);
 
-  if (result.affectedRows === 0) {
-    throw new ResourceNotFoundError(vacation.id);
-  }
+  if (result.affectedRows === 0) throw new ResourceNotFoundError(vacation.id);
 
   return vacation;
 }
 
-
-// Get one vacation: 
-async function getOneVacation(id: number): Promise<VacationModel> {
-  const sql = `SELECT vacationId AS id,  destination, description, imageName, startDate, endDate, price
-              FROM vacations
-              WHERE vacationId = ${id}`;
-  const vacations = await dal.execute(sql);
-  const vacation = vacations[0];
-  if (!vacation) {
-    throw new ResourceNotFoundError(id);
-  }
-  return vacation;
-}
-
-
-// Update partial vacation: 
+// Update partial vacation:
 async function updatePartialVacation(vacation: VacationModel): Promise<VacationModel> {
-
   const errors = vacation.validatePatch();
-  if (errors) {
-      throw new ValidationError(errors);
-  }
+  if (errors) throw new ValidationError(errors);
 
   const previousVacation = await getOneVacation(vacation.id);
 
- 
   if (vacation.image) {
-      const dotIndex = vacation.image.name.lastIndexOf(".");
-      const extension = vacation.image.name.substring(dotIndex);
-      vacation.imageName = uuid() + extension;
+    const file = vacation.image;
+    const filePath = file.tempFilePath || file.name;
 
-      await vacation.image.mv("./src/1-assets/images/" + vacation.imageName);
+    if (previousVacation.imageName) {
+      await deleteImage(previousVacation.imageName);
+    }
 
-      if (previousVacation.imageName) {
-          await fs.unlink('./src/1-assets/images/' + previousVacation.imageName);
-      }
+    vacation.imageName = await uploadImage(filePath);
+    delete vacation.image;
   } else {
-      vacation.imageName = previousVacation.imageName;
+    vacation.imageName = previousVacation.imageName;
   }
 
   const values = [];
@@ -168,25 +140,18 @@ async function updatePartialVacation(vacation: VacationModel): Promise<VacationM
 
   const fields = ["description", "destination", "startDate", "endDate", "price", "imageName"];
 
-for (const field of fields) {
+  for (const field of fields) {
     if (vacation[field] !== undefined) {
-        fieldsToUpdate.push(`${field} = ?`);
-        values.push(vacation[field]);
+      fieldsToUpdate.push(`${field} = ?`);
+      values.push(vacation[field]);
     }
-}
+  }
 
-  const sql = `
-      UPDATE vacations
-      SET ${fieldsToUpdate.join(", ")}
-      WHERE vacationId = ?
-  `;
-  values.push(vacation.id); 
+  const sql = `UPDATE vacations SET ${fieldsToUpdate.join(", ")} WHERE vacationId = ?`;
+  values.push(vacation.id);
 
   const result: OkPacket = await dal.execute(sql, values);
-
-  if (result.affectedRows === 0) {
-      throw new ResourceNotFoundError(vacation.id);
-  }
+  if (result.affectedRows === 0) throw new ResourceNotFoundError(vacation.id);
 
   const updatedVacation = await getOneVacation(vacation.id);
   socketLogic.reportUpdateVacation(updatedVacation);
@@ -194,19 +159,14 @@ for (const field of fields) {
   return updatedVacation;
 }
 
-
-
+// Delete vacation:
 async function deleteVacation(id: number): Promise<void> {
-
   const previousImage = await getPreviousImage(id);
 
-
-  const sql = `DELETE FROM vacations WHERE vacationId = ${id}`
+  const sql = `DELETE FROM vacations WHERE vacationId = ${id}`;
   await dal.execute(sql);
 
-
-  //Remove from disk
-  await fs.unlink('./src/1-assets/images/' + previousImage);
+  await deleteImage(previousImage);
 
   socketLogic.reportDeleteVacation(id);
 }
@@ -217,5 +177,4 @@ export default {
   updateFullVacation,
   deleteVacation,
   updatePartialVacation
-}
-
+};

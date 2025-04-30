@@ -15,11 +15,15 @@ expressServer.use(cors());
 
 expressServer.use(express.json());
 
-expressServer.use(expressFileUpload());
+// expressServer.use(expressFileUpload());
+expressServer.use(expressFileUpload({ useTempFiles: true }));
+
 
 expressServer.use("/api", authController);
 expressServer.use("/api", vacationController);
 
+
+expressServer.use("/images", express.static(__dirname + "/1-assets/images"));
 
 expressServer.use("*", (request: Request, response: Response, next: NextFunction) => {
   const err = new RouteNotFoundError(request.method, request.originalUrl);
@@ -32,3 +36,4 @@ const httpServer = expressServer.listen(config.port, () => console.log(`Listenin
 
 
 socketLogic.init(httpServer);
+
