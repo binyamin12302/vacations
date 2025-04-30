@@ -1,7 +1,6 @@
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import expressFileUpload from "express-fileupload";
-import dotenv from "dotenv";
 import config from "./2-utils/config";
 import catchAll from "./3-middleware/catch-all";
 import { RouteNotFoundError } from "./4-models/errors-model";
@@ -11,7 +10,7 @@ import vacationController from "./6-controllers/vacations-controller";
 
 
 const expressServer = express();
-dotenv.config();
+
 
 expressServer.use(cors());
 
