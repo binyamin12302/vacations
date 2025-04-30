@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var socket_io_1 = require("socket.io");
-var socketServer;
+const socket_io_1 = require("socket.io");
+let socketServer;
 function init(httpServer) {
     // Create socket server: 
     socketServer = new socket_io_1.Server(httpServer, { cors: { origin: "*" } });
     // Listen to clients connection: 
-    socketServer.sockets.on("connection", function (socket) {
+    socketServer.sockets.on("connection", (socket) => {
         console.log("Client has been connected...");
     });
 }
@@ -27,10 +27,10 @@ function reportunfollowVacation(follow) {
     socketServer.sockets.emit("user-unfollow-vacation", follow);
 }
 exports.default = {
-    init: init,
-    reportAddVacation: reportAddVacation,
-    reportUpdateVacation: reportUpdateVacation,
-    reportDeleteVacation: reportDeleteVacation,
-    reportFollowVacation: reportFollowVacation,
-    reportunfollowVacation: reportunfollowVacation
+    init,
+    reportAddVacation,
+    reportUpdateVacation,
+    reportDeleteVacation,
+    reportFollowVacation,
+    reportunfollowVacation
 };
