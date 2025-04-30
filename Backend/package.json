@@ -26,14 +26,16 @@
     "mysql": "^2.18.1",
     "socket.io": "^4.8.1",
     "uuid": "^8.3.2",
-    "typescript": "^5.8.3",
-    "@types/node": "^17.0.45",
+    "@types/node": "^17.0.45"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",
     "@types/express-fileupload": "^1.5.1",
-    "@types/cors": "^2.8.17",
+    "@types/joi": "^17.2.2",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/mysql": "^2.15.27",
     "@types/uuid": "^8.3.4",
-    "@types/joi": "^17.2.2"
+    "typescript": "^5.8.3"
   }
 }
