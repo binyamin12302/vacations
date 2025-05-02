@@ -12,10 +12,9 @@ import vacationController from "./6-controllers/vacations-controller";
 const expressServer = express();
 
 
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://vacations-three.vercel.app"
-];
+const allowedOrigins = process.env.NODE_ENV === "development"
+  ? ["http://localhost:3000"]
+  : ["https://vacations-three.vercel.app"];
 
 expressServer.use(cors({
   origin: allowedOrigins,
