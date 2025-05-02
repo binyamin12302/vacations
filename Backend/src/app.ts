@@ -8,8 +8,10 @@ import socketLogic from "./5-logic/socket-logic";
 import authController from "./6-controllers/auth-controller";
 import vacationController from "./6-controllers/vacations-controller";
 
+console.log("CORS enabled for: " + process.env.NODE_ENV);
 
 const expressServer = express();
+
 
 
 const allowedOrigins = process.env.NODE_ENV === "development"
@@ -22,7 +24,7 @@ expressServer.use(cors({
 }));
 
 expressServer.use(express.json());
-console.log("CORS enabled for: " + process.env.NODE_ENV);
+
 
 // expressServer.use(expressFileUpload());
 expressServer.use(expressFileUpload({ useTempFiles: true }));
@@ -41,7 +43,8 @@ expressServer.use("*", (request: Request, response: Response, next: NextFunction
 
 expressServer.use(catchAll);
 
-const httpServer = expressServer.listen(config.port, () => console.log(`Listening....`));
+const httpServer = expressServer.listen(config.port, () => console.log("Server running on port", config.port));
+
 
 
 socketLogic.init(httpServer);
