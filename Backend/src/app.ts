@@ -22,6 +22,7 @@ expressServer.use(cors({
 }));
 
 expressServer.use(express.json());
+console.log("CORS enabled for: " + process.env.NODE_ENV);
 
 // expressServer.use(expressFileUpload());
 expressServer.use(expressFileUpload({ useTempFiles: true }));
