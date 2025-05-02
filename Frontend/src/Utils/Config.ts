@@ -1,5 +1,5 @@
 class Config {
-  public port = ""
+  public port = "";
   public registerUrl = "";
   public loginUrl = "";
   public vacationUrl = "";
@@ -9,28 +9,28 @@ class Config {
 }
 
 class DevelopmentConfig extends Config {
-  public port = "http://localhost:3001"
-  public registerUrl = "http://localhost:3001/api/auth/register/";
-  public loginUrl = "http://localhost:3001/api/auth/login/";
-  public vacationUrl = "http://localhost:3001/api/vacations/";
-  public vacationImageUrl = " http://localhost:3001/api/vacations/images/";
-  public followVacationUrl = "http://localhost:3001/api/auth/follow/";
-  public unfollowVacationUrl = "http://localhost:3001/api/auth/unfollow/";
+  public port = "http://localhost:3001/";
+  public registerUrl = this.port + "api/auth/register/";
+  public loginUrl = this.port + "api/auth/login/";
+  public vacationUrl = this.port + "api/vacations/";
+  public vacationImageUrl = this.port + "api/vacations/images/";
+  public followVacationUrl = this.port + "api/auth/follow/";
+  public unfollowVacationUrl = this.port + "api/auth/unfollow/";
 }
-
-
 
 class ProductionConfig extends Config {
-  public port = "https://vacations-bin.herokuapp.com/"
-  public registerUrl = "https://vacations-bin.herokuapp.com/api/auth/register/";
-  public loginUrl = "https://vacations-bin.herokuapp.com/api/auth/login/";
-  public vacationUrl = "https://vacations-bin.herokuapp.com//api/vacations/";
-  public vacationImageUrl = "https://vacations-bin.herokuapp.com/api/vacations/images/";
-  public followVacationUrl = "https://vacations-bin.herokuapp.com/api/auth/follow/";
-  public unfollowVacationUrl = "https://vacations-bin.herokuapp.com/api/auth/unfollow/";
+  public port = "https://vacations-git-master-binyas-projects-44a7476a.vercel.app";
+  public registerUrl = this.port + "api/auth/register/";
+  public loginUrl = this.port + "api/auth/login/";
+  public vacationUrl = this.port + "api/vacations/";
+  public vacationImageUrl = this.port + "api/vacations/images/";
+  public followVacationUrl = this.port + "api/auth/follow/";
+  public unfollowVacationUrl = this.port + "api/auth/unfollow/";
 }
 
-
-const config = process.env.NODE_ENV === "development" ? new DevelopmentConfig() : new ProductionConfig();
+const config =
+  process.env.NODE_ENV === "development"
+    ? new DevelopmentConfig()
+    : new ProductionConfig();
 
 export default config;
