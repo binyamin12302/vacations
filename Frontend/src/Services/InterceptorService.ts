@@ -6,17 +6,14 @@ class InterceptorService {
 
     public createInterceptors(): void {
         
-        // Send token for each request and attach credentials:
+        // Send token for each request: 
         axios.interceptors.request.use(request => {
 
             if(authService.isLoggedIn()) {
                 request.headers = {
-                    ...request.headers,
                     authorization: "Bearer " + store.getState().authState.token
                 };
             }
-
-            request.withCredentials = true;
 
             return request;
 
