@@ -17,7 +17,7 @@ class InterceptorService {
 
 
             request.withCredentials = true; // for CORS requests
-            request.headers["Access-Control-Allow-Origin"] = "*"; // for CORS requests
+            
 
             return request;
 
