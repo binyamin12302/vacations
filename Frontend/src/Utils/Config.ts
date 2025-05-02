@@ -19,7 +19,7 @@ class DevelopmentConfig extends Config {
 }
 
 class ProductionConfig extends Config {
-  public port = "https://vacations-git-master-binyas-projects-44a7476a.vercel.app";
+  public port = "https://vacation-backend-7dsu.onrender.com/";
   public registerUrl = this.port + "api/auth/register/";
   public loginUrl = this.port + "api/auth/login/";
   public vacationUrl = this.port + "api/vacations/";
