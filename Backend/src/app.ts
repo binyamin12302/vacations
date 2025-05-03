@@ -12,14 +12,12 @@ console.log("CORS enabled for: " + process.env.NODE_ENV);
 
 const expressServer = express();
 
-
-
-const allowedOrigins = process.env.NODE_ENV === "development"
-  ? ["http://localhost:3000"]
-  : ["https://vacations-three.vercel.app"];
+const clientUrl = process.env.NODE_ENV === "development"
+  ? "http://localhost:3000"
+  : "https://vacations-three.vercel.app";
 
 expressServer.use(cors({
-  origin: allowedOrigins,
+  origin: clientUrl,
   credentials: true
 }));
 
