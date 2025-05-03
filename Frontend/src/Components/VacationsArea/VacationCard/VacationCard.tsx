@@ -51,7 +51,7 @@ function VacationCard(props: VacationCardProps): JSX.Element {
     return (
         <Col className="dc VacationCard  d-flex justify-content-center mb-2 p-3" >
             <Card className="shadow dd" style={{ width: '15rem' }} >
-                <Card.Img variant="top" src={config.vacationImageUrl + imageName} height="180" />
+                <Card.Img variant="top" src={imageName} height="180" />
 
                 <Card.ImgOverlay className="p-2 h-50">
 

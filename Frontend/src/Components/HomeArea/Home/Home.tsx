@@ -78,9 +78,7 @@ function Home(): JSX.Element {
     indexOfLastVacation
   );
 
-  // Change page
-  // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
+ 
   return (
     <Container className="Home  p-2">
       {authService.isUserAdmin() && (
