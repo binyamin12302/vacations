@@ -6,7 +6,8 @@ const connection = mysql.createPool({
     host: config.sqlHost, // computer name
     user: config.sqlUser, // database username
     password: config.sqlPassword, // database password
-    database: config.sqlDatabase // database name
+    database: config.sqlDatabase, // database name
+    port: config.port
 });
 
 function execute(sql: string, values?: any[]): Promise<any> { // Promisify

@@ -21,7 +21,7 @@ class Config {
 class DevelopmentConfig extends Config {
     constructor() {
         super(...arguments);
-        this.port = 3001;
+        this.port = +(process.env.SQL_PORT || 3306);
         this.sqlHost = process.env.SQL_HOST || "localhost";
         this.sqlUser = process.env.SQL_USER || "root";
         this.sqlPassword = process.env.SQL_PASSWORD || "";
@@ -31,7 +31,7 @@ class DevelopmentConfig extends Config {
 class ProductionConfig extends Config {
     constructor() {
         super(...arguments);
-        this.port = +(process.env.PORT || 8080);
+        this.port = +(process.env.SQL_PORT || 3306);
         this.sqlHost = process.env.SQL_HOST || "";
         this.sqlUser = process.env.SQL_USER || "";
         this.sqlPassword = process.env.SQL_PASSWORD || "";

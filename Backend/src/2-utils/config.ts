@@ -11,10 +11,11 @@ class Config {
   public sqlUser = "";
   public sqlPassword = "";
   public sqlDatabase = "";
+
 }
 
 class DevelopmentConfig extends Config {
-  public port = 3001;
+  public port = +(process.env.SQL_PORT || 3306); 
   public sqlHost = process.env.SQL_HOST || "localhost";
   public sqlUser = process.env.SQL_USER || "root";
   public sqlPassword = process.env.SQL_PASSWORD || "";
@@ -22,7 +23,7 @@ class DevelopmentConfig extends Config {
 }
 
 class ProductionConfig extends Config {
-  public port = +(process.env.PORT || 8080); 
+  public port = +(process.env.SQL_PORT || 3306); 
   public sqlHost = process.env.SQL_HOST || "";
   public sqlUser = process.env.SQL_USER || "";
   public sqlPassword = process.env.SQL_PASSWORD || "";
