@@ -46,7 +46,7 @@ function addVacation(vacation) {
             throw new errors_model_1.ValidationError(errors);
         if (vacation.image) {
             const file = vacation.image;
-            const filePath = file.tempFilePath || file.name;
+            const filePath = file.tempFilePath;
             vacation.imageName = yield (0, upload_logic_1.uploadImage)(filePath);
             delete vacation.image;
         }
@@ -93,7 +93,7 @@ function updateFullVacation(vacation) {
             throw new errors_model_1.ValidationError(errors);
         if (vacation.image) {
             const file = vacation.image;
-            const filePath = file.tempFilePath || file.name;
+            const filePath = file.tempFilePath;
             vacation.imageName = yield (0, upload_logic_1.uploadImage)(filePath);
             delete vacation.image;
         }
@@ -125,7 +125,7 @@ function updatePartialVacation(vacation) {
         const previousVacation = yield getOneVacation(vacation.id);
         if (vacation.image) {
             const file = vacation.image;
-            const filePath = file.tempFilePath || file.name;
+            const filePath = file.tempFilePath;
             if (previousVacation.imageName) {
                 yield (0, upload_logic_1.deleteImage)(previousVacation.imageName);
             }

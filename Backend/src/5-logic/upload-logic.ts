@@ -1,11 +1,16 @@
 import cloudinary from "../2-utils/cloudinary";
 
 export async function uploadImage(filePath: string) {
-  const result = await cloudinary.uploader.upload(filePath, {
-    folder: "vacation-project",
-  });
+  try {
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder: "vacation-project",
+    });
 
-  return result.secure_url;
+    return result.secure_url;
+  } catch (err) {
+    console.error("Cloudinary upload failed:", err);
+    throw err;
+  }
 }
 
 export async function deleteImage(imageUrl: string): Promise<void> {

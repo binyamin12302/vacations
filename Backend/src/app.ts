@@ -25,7 +25,9 @@ expressServer.use(express.json());
 
 
 // expressServer.use(expressFileUpload());
-expressServer.use(expressFileUpload({ useTempFiles: true }));
+expressServer.use(expressFileUpload({ useTempFiles: true, 
+  tempFileDir: "/tmp"
+ }));
 
 
 expressServer.use("/api", authController);

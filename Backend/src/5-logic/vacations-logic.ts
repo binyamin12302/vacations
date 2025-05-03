@@ -36,7 +36,7 @@ async function addVacation(vacation: VacationModel): Promise<VacationModel> {
 
   if (vacation.image) {
     const file = vacation.image;
-    const filePath = file.tempFilePath || file.name;
+    const filePath = file.tempFilePath;
     vacation.imageName = await uploadImage(filePath);
     delete vacation.image;
   }
@@ -86,7 +86,7 @@ async function updateFullVacation(vacation: VacationModel): Promise<VacationMode
 
   if (vacation.image) {
     const file = vacation.image;
-    const filePath = file.tempFilePath || file.name;
+    const filePath = file.tempFilePath;
     vacation.imageName = await uploadImage(filePath);
     delete vacation.image;
   }
@@ -123,7 +123,7 @@ async function updatePartialVacation(vacation: VacationModel): Promise<VacationM
 
   if (vacation.image) {
     const file = vacation.image;
-    const filePath = file.tempFilePath || file.name;
+    const filePath = file.tempFilePath;
 
     if (previousVacation.imageName) {
       await deleteImage(previousVacation.imageName);

@@ -23,7 +23,9 @@ expressServer.use((0, cors_1.default)({
 }));
 expressServer.use(express_1.default.json());
 // expressServer.use(expressFileUpload());
-expressServer.use((0, express_fileupload_1.default)({ useTempFiles: true }));
+expressServer.use((0, express_fileupload_1.default)({ useTempFiles: true,
+    tempFileDir: "/tmp"
+}));
 expressServer.use("/api", auth_controller_1.default);
 expressServer.use("/api", vacations_controller_1.default);
 expressServer.use("/images", express_1.default.static(__dirname + "/1-assets/images"));

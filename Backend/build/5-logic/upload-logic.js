@@ -17,10 +17,16 @@ exports.deleteImage = deleteImage;
 const cloudinary_1 = __importDefault(require("../2-utils/cloudinary"));
 function uploadImage(filePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const result = yield cloudinary_1.default.uploader.upload(filePath, {
-            folder: "vacation-project",
-        });
-        return result.secure_url;
+        try {
+            const result = yield cloudinary_1.default.uploader.upload(filePath, {
+                folder: "vacation-project",
+            });
+            return result.secure_url;
+        }
+        catch (err) {
+            console.error("Cloudinary upload failed:", err);
+            throw err;
+        }
     });
 }
 function deleteImage(imageUrl) {
