@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql from "mysql2";
 import config from "./config";
 
 // Create pool of connection and supply one when needed: 
