@@ -13,6 +13,10 @@ A full-stack web application enabling users to explore and follow vacation packa
 * **Username:** `ronaldo_nazario`
 * **Password:** `Aa11!!Bb`
 
+## 📸 Screenshot
+
+![Vacation Demo](https://user-images.githubusercontent.com/57687331/200180588-892d8640-4e83-41f8-8069-f1be4e62f491.png)
+
 ## 🧭 Features
 
 ### 👥 Users
@@ -46,10 +50,6 @@ A full-stack web application enabling users to explore and follow vacation packa
 * Cloudinary for image storage
 * express-fileupload
 * WebSockets with Socket.IO([FreeCodeCamp][7])
-
-## 📸 Screenshot
-
-![Vacation Demo](https://user-images.githubusercontent.com/57687331/200180588-892d8640-4e83-41f8-8069-f1be4e62f491.png)
 
 ## 📁 Project Structure
 
@@ -115,7 +115,7 @@ The frontend will be available at `http://localhost:3000`, and the backend at `h
   * File uploads and integration with external services (Cloudinary).
   * Relational database management with MySQL.
   * Real-time updates using WebSockets.
-  * Responsive and user-friendly UI design.([Medium][1], [Reddit][8])
+  * Responsive and user-friendly UI design.
 
 * Real-time updates are implemented using WebSockets to reflect changes instantly without requiring page refreshes.
 
