@@ -20,14 +20,14 @@ A full-stack web application enabling users to explore and follow vacation packa
 * Browse available vacations with details including images, prices, dates, and descriptions.
 * Follow or unfollow vacations.
 * View real-time follower counts.
-* Navigate through vacations using pagination.([Medium][1], [Medium][2])
+* Navigate through vacations using pagination.
 
 ### 🛠️ Administrators
 
 * Add new vacations with image uploads to Cloudinary.
 * Edit existing vacation details.
 * Delete vacations.
-* Broadcast real-time updates to all users via WebSockets.([DEV Community][3], [Stack Overflow][4])
+* Broadcast real-time updates to all users via WebSockets.
 
 ## 🛠️ Tech Stack
 
@@ -37,7 +37,7 @@ A full-stack web application enabling users to explore and follow vacation packa
 * React Router
 * Axios
 * React Hook Form
-* Bootstrap([Hacker News][5], [WIRED][6], [Medium][2])
+* Bootstrap
 
 ### Backend
 
@@ -45,7 +45,7 @@ A full-stack web application enabling users to explore and follow vacation packa
 * MySQL (hosted on Railway)
 * Cloudinary for image storage
 * express-fileupload
-* WebSockets with Socket.IO([FreeCodeCamp][7])
+* WebSockets with Socket.IO
 
 ## 📸 Screenshot
 
@@ -95,7 +95,7 @@ While the application is fully deployed and functional online, if you'd like to 
 3. **Backend Setup:**
 
    * Create a `.env` file with your MySQL and Cloudinary credentials.
-   * Then run:([Reddit][8])
+   * Then run:
 
      ```bash
      cd backend
