@@ -1,6 +1,3 @@
-
----
-
 # 🌴 Vacation Management App
 
 A full-stack web application enabling users to explore and follow vacation packages, while administrators can manage vacation data in real-time.
