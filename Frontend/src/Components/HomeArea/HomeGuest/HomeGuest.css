@@ -1,15 +1,25 @@
+/* ========================================
+   Typography and Headings
+======================================== */
 .HomeGuest h1 {
-  font-family: Verdana, Geneva, Tahoma, sans-serif
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.secPad {
-  padding: 60px 0;
-}
-
-section {
+.heading {
+  padding: 3px 10px;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
   display: block;
+  text-align: center;
 }
 
+.text-center {
+  text-align: center;
+}
+
+/* ========================================
+   General Layout
+======================================== */
 .container {
   padding-right: 15px;
   padding-left: 15px;
@@ -17,30 +27,58 @@ section {
   margin-left: auto;
 }
 
-
-.heading {
-  padding: 3px 10px;
-  padding-bottom: 15px;
-  margin-bottom: 30px;
-  display: block;
+.secPad {
+  padding: 60px 0;
 }
 
-.text-center {
-  text-align: center;
+/* ========================================
+   Hero Section Background
+======================================== */
+.bg-overlay {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../../../assets/images/2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  color: #fff;
+  height: 450px;
+  padding-top: 50px;
 }
 
-
-#packages .row {
-  margin-bottom: 20px;
+/* ========================================
+   Responsive Register Button
+======================================== */
+.responsive-button {
+  padding: 10px 24px;
+  font-size: 1.1rem;
+  border: none;
+  display: inline-block;
+  width: auto;
+  min-width: 140px;
+  max-width: 100%;
 }
 
-.row {
-  margin-right: -15px;
-  margin-left: -15px;
+@media (max-width: 576px) {
+  .responsive-button {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
 }
 
-/*Packages*/
+/* ========================================
+   Vacation Cards Grid Layout
+======================================== */
+.vacation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
 
+/* ========================================
+   Vacation Cards + Hover Effect
+======================================== */
 .img-responsive {
   display: block;
   height: auto;
@@ -48,20 +86,18 @@ section {
 }
 
 .cuadro_intro_hover {
-  padding: 0px;
   position: relative;
   overflow: hidden;
   height: 190px;
   margin-bottom: 20px;
+  padding: 0;
+  background-color: #cccccc;
 }
 
 .cuadro_intro_hover:hover .caption {
   opacity: 1;
   transform: translateY(-150px);
-  -webkit-transform: translateY(-150px);
-  -moz-transform: translateY(-150px);
-  -ms-transform: translateY(-150px);
-  -o-transform: translateY(-150px);
+  transition: all 0.3s ease-in-out;
 }
 
 .cuadro_intro_hover img {
@@ -71,12 +107,9 @@ section {
 .cuadro_intro_hover .caption {
   position: absolute;
   top: 150px;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
   width: 100%;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
 }
 
 .cuadro_intro_hover .blur {
@@ -97,12 +130,6 @@ section {
   width: 100%;
 }
 
-.caption-text p {
-  color: #EBEBEB;
-  line-height: 22px;
-  margin: 0 0 10px;
-}
-
 .caption-text h3 {
   border-top: 1px solid white;
   border-bottom: 1px solid white;
@@ -115,34 +142,15 @@ section {
   line-height: 1.1;
 }
 
-.row:before, .row:after {
-  display: table;
-  content: " ";
+.caption-text p {
+  color: #EBEBEB;
+  line-height: 22px;
+  margin: 0 0 10px;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 4; 
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.row:after {
-  clear: both;
-}
-
-.bg-parlex {
-  padding-top: 0px;
-  background-image: url(../../../assets/images/banner-bg2.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-
-.secPad {
-  padding: 60px 0;
-}
-
-.bg-overlay {
-  background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)), url("../../../assets/images/2.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center center;
-  color: #fff;
-  height: 450px;
-  padding-top: 50px;
-}

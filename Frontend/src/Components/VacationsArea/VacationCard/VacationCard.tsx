@@ -5,7 +5,6 @@ import store from "../../../Redux/Store";
 import authService from "../../../Services/AuthService";
 import notifyService from "../../../Services/NotifyService";
 import vacationsService from "../../../Services/VacationsService";
-import config from "../../../Utils/Config";
 import EditVacation from "../EditVacation/EditVacation";
 import "./VacationCard.css";
 

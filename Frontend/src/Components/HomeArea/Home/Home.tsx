@@ -11,7 +11,6 @@ import vacationsService from "../../../Services/VacationsService";
 import Pagination from "../../SharedArea/Pagination/Pagination";
 import AddVacation from "../../VacationsArea/AddVacation/AddVacation";
 import VacationCard from "../../VacationsArea/VacationCard/VacationCard";
-
 import "./Home.css";
 
 function Home(): JSX.Element {
@@ -20,32 +19,33 @@ function Home(): JSX.Element {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vacationsPerPage] = useState<number>(10);
 
-
   const handleCloseModalAddVacation = () => setModalAddVacation(false);
   const handleShowModalAddVacation = () => setModalAddVacation(true);
 
   useEffect(() => {
     socketService.connect();
-
-    vacationsService
-      .getAllVacations()
-      .then((vacation) => console.log(vacation))
-      .catch((err) => console.log(err.message));
-
+  
     const unsubscribe = store.subscribe(() => {
       const dup = [...store.getState().vacationsState.vacations];
-
-      vacationsService
-        .getAllVacations()
-        .then((vacation) => console.log(vacation))
-        .catch((err) => console.log(err.message));
-
       setVacation(dup);
     });
-
+  
+    
+    if (store.getState().vacationsState.vacations.length === 0) {
+      vacationsService
+        .getAllVacations()
+        .then((vacationList) => {
+          store.dispatch(fetchVacationsAction(vacationList));
+        })
+        .catch((err) => console.log(err.message));
+    } else {
+      const dup = [...store.getState().vacationsState.vacations];
+      setVacation(dup);
+    }
+  
     return () => {
       unsubscribe();
-      store.dispatch(fetchVacationsAction([]));
+      store.dispatch(fetchVacationsAction([])); 
       socketService.disconnect();
     };
   }, []);
@@ -78,7 +78,6 @@ function Home(): JSX.Element {
     indexOfLastVacation
   );
 
- 
   return (
     <Container className="Home  p-2">
       {authService.isUserAdmin() && (

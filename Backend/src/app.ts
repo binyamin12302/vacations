@@ -8,7 +8,7 @@ import socketLogic from "./5-logic/socket-logic";
 import authController from "./6-controllers/auth-controller";
 import vacationController from "./6-controllers/vacations-controller";
 
-console.log("CORS enabled for: " + process.env.NODE_ENV);
+
 
 const expressServer = express();
 
