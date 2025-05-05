@@ -1,44 +1,122 @@
+# 🌴 Vacation Management App
 
-# Vacations Project 
+A full-stack web application enabling users to explore and follow vacation packages, while administrators can manage vacation data in real-time.
 
-The vacation website allows you to open an account, 
-after opening the account you can see all 
-the vacations on the website. 
-There are two types of accounts.
+## 🚀 Live Demo
 
-- User: follow\unfollow vacations.
+🔗 [Live Website](https://vacations-three.vercel.app)
 
-- Admin: can edit vacation, add new vacation, and see a chart with all the vacations users are following.
-## Demo
+> 🕒 *Note:* The backend is hosted on Render's free tier, which may cause a delay of a few seconds on the first request after inactivity.
 
-![item4](https://user-images.githubusercontent.com/57687331/200180588-892d8640-4e83-41f8-8069-f1be4e62f491.png)
+## 🔑 Admin Access
 
+* **Username:** `ronaldo_nazario`
+* **Password:** `Aa11!!Bb`
 
-## Installation
+## 🧭 Features
 
-Install Vacation project with npm
+### 👥 Users
 
---Frontend---
-```bash
-  cd Frontend
-  npm install
-  npm start
+* Browse available vacations with details including images, prices, dates, and descriptions.
+* Follow or unfollow vacations.
+* View real-time follower counts.
+* Navigate through vacations using pagination.
+
+### 🛠️ Administrators
+
+* Add new vacations with image uploads to Cloudinary.
+* Edit existing vacation details.
+* Delete vacations.
+* Broadcast real-time updates to all users via WebSockets.
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* React with TypeScript
+* React Router
+* Axios
+* React Hook Form
+* Bootstrap
+
+### Backend
+
+* Node.js with Express and TypeScript
+* MySQL (hosted on Railway)
+* Cloudinary for image storage
+* express-fileupload
+* WebSockets with Socket.IO
+
+## 📸 Screenshot
+
+![Vacation Demo](https://user-images.githubusercontent.com/57687331/200180588-892d8640-4e83-41f8-8069-f1be4e62f491.png)
+
+## 📁 Project Structure
+
+```
+📦 backend
+ ┣ 📂2-utils
+ ┃ ┣ 📜config.ts            → Environment-based configurations
+ ┃ ┣ 📜dal.ts               → Database access layer
+ ┃ ┣ 📜cloudinary.ts        → Cloudinary setup
+ ┣ 📂4-models
+ ┃ ┗ 📜vacation-model.ts    → Vacation data models and validations
+ ┣ 📂6-controllers
+ ┃ ┗ 📜vacations-controller.ts → Express routes
+ ┣ 📂5-logic
+ ┃ ┗ 📜vacations-logic.ts   → Core business logic
+
+📦 frontend
+ ┣ 📂Components
+ ┃ ┗ 📂VacationArea
+ ┃   ┗ 📜VacationCard.tsx    → Vacation display component
+ ┣ 📜App.tsx
+ ┣ 📜index.tsx
 ```
 
---Backend---
-```bash
-  cd Backend
-  npm install
-  npm start
-```
-    
---Database--- 
-```bash
-  # Add Database to your XAMPP or MySQL Workbench
-```
+## 💾 Local Installation (Optional)
 
-## Tech Stack
+While the application is fully deployed and functional online, if you'd like to run it locally:
 
-**Client:** HTML, CSS, React, Redux, TypeScript
+1. **Clone the repository:**
 
-**Server:** Socket.IO, Node, Express, MySQL
+   ```bash
+   git clone https://github.com/binyamin12302/vacations
+   ```
+
+2. **Frontend Setup:**
+
+   ```bash
+   cd frontend
+   npm install
+   npm start
+   ```
+
+3. **Backend Setup:**
+
+   * Create a `.env` file with your MySQL and Cloudinary credentials.
+   * Then run:
+
+     ```bash
+     cd backend
+     npm install
+     npm run build
+     npm start
+     ```
+
+The frontend will be available at `http://localhost:3000`, and the backend at `http://localhost:3001`.
+
+## 🚀 What This Project Demonstrates
+
+* This project demonstrates:
+
+  * Clean separation of concerns.
+  * Authentication and role-based access control.
+  * File uploads and integration with external services (Cloudinary).
+  * Relational database management with MySQL.
+  * Real-time updates using WebSockets.
+  * Responsive and user-friendly UI design.
+
+* Real-time updates are implemented using WebSockets to reflect changes instantly without requiring page refreshes.
+
+---
