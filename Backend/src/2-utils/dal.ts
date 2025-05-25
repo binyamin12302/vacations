@@ -7,7 +7,7 @@ const connection = mysql.createPool({
     user: config.sqlUser, // database username
     password: config.sqlPassword, // database password
     database: config.sqlDatabase, // database name
-    port: config.port
+    port: config.sqlPort, // database port
 });
 
 function execute(sql: string, values?: any[]): Promise<any> { // Promisify

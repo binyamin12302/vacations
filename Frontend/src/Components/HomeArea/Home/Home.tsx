@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Modal, Row } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import FollowModel from "../../../Models/FollowModel";
 import VacationModel from "../../../Models/VacationModel";
 import store from "../../../Redux/Store";
@@ -18,34 +20,37 @@ function Home(): JSX.Element {
   const [showModalAddVacation, setModalAddVacation] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vacationsPerPage] = useState<number>(10);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleCloseModalAddVacation = () => setModalAddVacation(false);
   const handleShowModalAddVacation = () => setModalAddVacation(true);
 
   useEffect(() => {
     socketService.connect();
-  
+
     const unsubscribe = store.subscribe(() => {
       const dup = [...store.getState().vacationsState.vacations];
       setVacation(dup);
     });
-  
-    
+
     if (store.getState().vacationsState.vacations.length === 0) {
+      setLoading(true);
       vacationsService
         .getAllVacations()
         .then((vacationList) => {
           store.dispatch(fetchVacationsAction(vacationList));
         })
-        .catch((err) => console.log(err.message));
+        .catch((err) => console.log(err.message))
+        .finally(() => setLoading(false));
     } else {
       const dup = [...store.getState().vacationsState.vacations];
       setVacation(dup);
+      setLoading(false);
     }
-  
+
     return () => {
       unsubscribe();
-      store.dispatch(fetchVacationsAction([])); 
+      store.dispatch(fetchVacationsAction([]));
       socketService.disconnect();
     };
   }, []);
@@ -56,9 +61,7 @@ function Home(): JSX.Element {
   ) {
     try {
       const index = vacations.findIndex((v) => v.id === follow.vacationId);
-
       const vacation = vacations[index];
-
       if (isFollowing === "Unfollow") {
         await authService.unfollowVacation(follow);
         vacation.followState = "Follow";
@@ -79,9 +82,9 @@ function Home(): JSX.Element {
   );
 
   return (
-    <Container className="Home  p-2">
+    <Container className="Home p-2">
       {authService.isUserAdmin() && (
-        <div className="col-md-12  adm text-center">
+        <div className="col-md-12 adm text-center">
           <Button
             variant="light"
             className="border btn-vac border-secondary shadow-none"
@@ -106,22 +109,49 @@ function Home(): JSX.Element {
         </div>
       )}
 
-      <Row xs={1} sm={1} md={2} lg={3} xl={5} className="g-4 m-auto">
-        {currentVacations.map((v) => (
-          <VacationCard
-            handleFollow={handleFollowVacation}
-            key={v.id}
-            vacation={v}
-          />
-        ))}
-      </Row>
+      {loading ? (
+        <Row xs={1} sm={1} md={2} lg={3} xl={5} className="g-4 m-auto">
+          {[...Array(vacationsPerPage)].map((_, i) => (
+            <div className="col" key={i}>
+              <div className="card shadow mb-4" style={{ width: "15rem" }}>
+                <Skeleton height={180} />
+                <div className="card-body">
+                  <h5 className="card-title">
+                    <Skeleton width={120} />
+                  </h5>
+                  <p className="card-text">
+                    <Skeleton count={2} />
+                  </p>
+                  <Skeleton height={30} width={80} style={{ marginBottom: 10 }} />
+                  <Skeleton height={20} width={100} />
+                  <Skeleton height={20} width={100} />
+                  <Skeleton height={20} width={100} />
+                  <Skeleton height={36} width="100%" style={{ marginTop: 10 }} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </Row>
+      ) : (
+        <>
+          <Row xs={1} sm={1} md={2} lg={3} xl={5} className="g-4 m-auto">
+            {currentVacations.map((v) => (
+              <VacationCard
+                handleFollow={handleFollowVacation}
+                key={v.id}
+                vacation={v}
+              />
+            ))}
+          </Row>
 
-      <Pagination
-        vacationsPerPage={vacationsPerPage}
-        totalVacations={vacations.length}
-        paginate={setCurrentPage}
-        currentPage={currentPage}
-      />
+          <Pagination
+            vacationsPerPage={vacationsPerPage}
+            totalVacations={vacations.length}
+            paginate={setCurrentPage}
+            currentPage={currentPage}
+          />
+        </>
+      )}
     </Container>
   );
 }

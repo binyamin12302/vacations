@@ -11,7 +11,8 @@ class Config {
     constructor() {
         this.isDevelopment = process.env.NODE_ENV === "development";
         this.isProduction = process.env.NODE_ENV === "production";
-        this.port = 0;
+        this.port = 0; // Node/Express
+        this.sqlPort = 0; // MySQL
         this.sqlHost = "";
         this.sqlUser = "";
         this.sqlPassword = "";
@@ -21,7 +22,8 @@ class Config {
 class DevelopmentConfig extends Config {
     constructor() {
         super(...arguments);
-        this.port = +(process.env.SQL_PORT || 3306);
+        this.port = +(process.env.PORT || 3000); // Node/Express (3000)
+        this.sqlPort = +(process.env.SQL_PORT || 3306); // MySQL (3306)
         this.sqlHost = process.env.SQL_HOST || "localhost";
         this.sqlUser = process.env.SQL_USER || "root";
         this.sqlPassword = process.env.SQL_PASSWORD || "";
@@ -31,7 +33,8 @@ class DevelopmentConfig extends Config {
 class ProductionConfig extends Config {
     constructor() {
         super(...arguments);
-        this.port = +(process.env.SQL_PORT || 3306);
+        this.port = +(process.env.PORT || 3000); // גם בפרודקשן
+        this.sqlPort = +(process.env.SQL_PORT || 3306); // MySQL
         this.sqlHost = process.env.SQL_HOST || "";
         this.sqlUser = process.env.SQL_USER || "";
         this.sqlPassword = process.env.SQL_PASSWORD || "";
