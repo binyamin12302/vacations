@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Modal, Row } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import FollowModel from "../../../Models/FollowModel";
 import VacationModel from "../../../Models/VacationModel";
 import store from "../../../Redux/Store";
@@ -81,6 +79,10 @@ function Home(): JSX.Element {
     indexOfLastVacation
   );
 
+  const cardsToShow = loading && vacations.length === 0
+    ? Array(vacationsPerPage).fill(null)
+    : currentVacations;
+
   return (
     <Container className="Home p-2">
       {authService.isUserAdmin() && (
@@ -92,14 +94,12 @@ function Home(): JSX.Element {
           >
             Add Vacation
           </Button>
-
           <NavLink
             className="btn btn-secondary text-white shadow-none"
             to="/chart"
           >
             Go to the Chart
           </NavLink>
-
           <Modal
             show={showModalAddVacation}
             onHide={handleCloseModalAddVacation}
@@ -109,49 +109,23 @@ function Home(): JSX.Element {
         </div>
       )}
 
-      {loading ? (
-        <Row xs={1} sm={1} md={2} lg={3} xl={5} className="g-4 m-auto">
-          {[...Array(vacationsPerPage)].map((_, i) => (
-            <div className="col" key={i}>
-              <div className="card shadow mb-4" style={{ width: "15rem" }}>
-                <Skeleton height={180} />
-                <div className="card-body">
-                  <h5 className="card-title">
-                    <Skeleton width={120} />
-                  </h5>
-                  <p className="card-text">
-                    <Skeleton count={2} />
-                  </p>
-                  <Skeleton height={30} width={80} style={{ marginBottom: 10 }} />
-                  <Skeleton height={20} width={100} />
-                  <Skeleton height={20} width={100} />
-                  <Skeleton height={20} width={100} />
-                  <Skeleton height={36} width="100%" style={{ marginTop: 10 }} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </Row>
-      ) : (
-        <>
-          <Row xs={1} sm={1} md={2} lg={3} xl={5} className="g-4 m-auto">
-            {currentVacations.map((v) => (
-              <VacationCard
-                handleFollow={handleFollowVacation}
-                key={v.id}
-                vacation={v}
-              />
-            ))}
-          </Row>
-
-          <Pagination
-            vacationsPerPage={vacationsPerPage}
-            totalVacations={vacations.length}
-            paginate={setCurrentPage}
-            currentPage={currentPage}
+      <Row xs={1} sm={1} md={2} lg={3} xl={5} className="g-4 m-auto">
+        {cardsToShow.map((v, i) => (
+          <VacationCard
+            key={v ? v.id : i}
+            vacation={v || {}} 
+            handleFollow={handleFollowVacation}
+            loading={loading && vacations.length === 0}
           />
-        </>
-      )}
+        ))}
+      </Row>
+
+      <Pagination
+        vacationsPerPage={vacationsPerPage}
+        totalVacations={vacations.length}
+        paginate={setCurrentPage}
+        currentPage={currentPage}
+      />
     </Container>
   );
 }
