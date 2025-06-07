@@ -8,51 +8,44 @@ import socketLogic from "./5-logic/socket-logic";
 import authController from "./6-controllers/auth-controller";
 import vacationController from "./6-controllers/vacations-controller";
 
+
+
 const expressServer = express();
 
-const clientUrl =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://vacations-three.vercel.app";
+const clientUrl = process.env.NODE_ENV === "development"
+  ? "http://localhost:3000"
+  : "https://vacations-three.vercel.app";
 
-expressServer.use(
-  cors({
-    origin: clientUrl,
-    credentials: true,
-    allowedHeaders: ["authorization", "content-type"], 
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-  })
-);
+expressServer.use(cors({
+  origin: clientUrl,
+  credentials: true
+}));
 
 expressServer.use(express.json());
 
-expressServer.use((req, res, next) => {
-    console.log("HEADERS:", req.headers);
-    next();
-});
 
 // expressServer.use(expressFileUpload());
-expressServer.use(
-  expressFileUpload({ useTempFiles: true, tempFileDir: "/tmp" })
-);
+expressServer.use(expressFileUpload({ useTempFiles: true, 
+  tempFileDir: "/tmp"
+ }));
+
 
 expressServer.use("/api", authController);
 expressServer.use("/api", vacationController);
 
+
 expressServer.use("/images", express.static(__dirname + "/1-assets/images"));
 
-expressServer.use(
-  "*",
-  (request: Request, response: Response, next: NextFunction) => {
-    const err = new RouteNotFoundError(request.method, request.originalUrl);
-    next(err);
-  }
-);
+expressServer.use("*", (request: Request, response: Response, next: NextFunction) => {
+  const err = new RouteNotFoundError(request.method, request.originalUrl);
+  next(err);
+});
 
 expressServer.use(catchAll);
 
-const httpServer = expressServer.listen(config.port, () =>
-  console.log("Server running on port", config.port)
-);
+const httpServer = expressServer.listen(config.port, () => console.log("Server running on port", config.port));
+
+
 
 socketLogic.init(httpServer);
+
