@@ -7,6 +7,9 @@ import socketLogic from "./socket-logic";
 
 // Get all vacations:
 async function getAllVacations(userId: number): Promise<VacationModel[]> {
+  
+  console.log("=== getAllVacations called! ===", userId);
+
   const sql = `SELECT 
               v.vacationId as id, v.destination, v.description, v.imageName, v.startDate,
               v.endDate, v.price,
