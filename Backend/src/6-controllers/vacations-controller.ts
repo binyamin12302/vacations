@@ -18,6 +18,9 @@ router.get("/vacations",verifyLoggedIn, async (request: Request, response: Respo
 
     console.log("=== getUserId ===", getUserId);
 
+    console.log("=== getAllVacations v2.1 ===");
+
+
     const vacations = await logic.getAllVacations(getUserId);
 
     console.log("=== vacations ===", vacations);
