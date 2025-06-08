@@ -14,6 +14,8 @@ const router = express.Router();
 router.get("/vacations",verifyLoggedIn, async (request: Request, response: Response, next: NextFunction) => {
   try {
 
+    
+
     const getUserId = cyber.getUserId(request)
 
     console.log("=== getUserId ===", getUserId);
@@ -24,6 +26,9 @@ router.get("/vacations",verifyLoggedIn, async (request: Request, response: Respo
     console.log("=== vacations ===", vacations);
 
     response.json(vacations);
+
+    throw new Error("PRODUCTION TEST ERROR");
+
 
   } catch (error: any) {
     next(error);

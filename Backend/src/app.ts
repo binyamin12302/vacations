@@ -9,6 +9,7 @@ import authController from "./6-controllers/auth-controller";
 import vacationController from "./6-controllers/vacations-controller";
 
 
+console.log("=== backend server started ===");
 
 const expressServer = express();
 
