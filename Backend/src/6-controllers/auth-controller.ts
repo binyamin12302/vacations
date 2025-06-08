@@ -7,6 +7,7 @@ import verifyLoggedIn from "../3-middleware/verify-logged-in";
 import FollowModel from "../4-models/follow-model";
 import dal from "../2-utils/dal";
 
+
 const router = express.Router();
 
 // POST http://localhost:3001/api/auth/register
@@ -36,6 +37,9 @@ router.post("/auth/login", async (request: Request, response: Response, next: Ne
     const token = await logic.login(credentials);
 
     response.json(token);
+
+    const dbName = await dal.execute("SELECT DATABASE() as db");
+    response.json(dbName);
 
   } catch (error: any) {
     next(error)
@@ -83,9 +87,5 @@ router.delete("/auth/unfollow/:id([0-9]+)", verifyLoggedIn, async (request: Requ
 });
 
 
-router.get("/api/dbtest", async (req, res) => {
-    const dbName = await dal.execute("SELECT DATABASE() as db");
-    res.json(dbName);
-});
 
 export default router;
