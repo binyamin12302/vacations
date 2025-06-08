@@ -11,18 +11,24 @@ async function getAllVacations(userId: number): Promise<VacationModel[]> {
   console.log("=== getAllVacations called! ===", userId);
 
   const sql = `SELECT 
-              v.vacationId as id, v.destination, v.description, v.imageName, v.startDate,
-              v.endDate, v.price,
-              (CASE WHEN followers.vacationId IS NULL THEN 'Follow' ELSE 'Unfollow' END) AS followState,
-              (CASE WHEN f_v.followers IS NOT NULL THEN f_v.followers ELSE 0 END) AS followers
-              FROM vacations v
-              LEFT JOIN (SELECT vacationId FROM followers WHERE userId = ${userId}) followers
-              ON v.vacationId = followers.vacationId
-              LEFT JOIN (
-                SELECT vacationId, COUNT(vacationId) AS followers
-                FROM followers
-                GROUP BY vacationId
-              ) AS f_v ON v.vacationId = f_v.vacationId`;
+  v.vacationId as id, 
+  v.destination, 
+  v.description, 
+  v.imageName, 
+  v.startDate,
+  v.endDate, 
+  v.price,
+  (CASE WHEN followers.vacationId IS NULL THEN 'Follow' ELSE 'Unfollow' END) AS followState,
+  (CASE WHEN f_v.followers IS NOT NULL THEN f_v.followers ELSE 0 END) AS followers
+FROM vacations v
+LEFT JOIN (SELECT vacationId FROM followers WHERE userId = ${userId}) followers
+  ON v.vacationId = followers.vacationId
+LEFT JOIN (
+  SELECT vacationId, COUNT(vacationId) AS followers
+  FROM followers
+  GROUP BY vacationId
+) AS f_v ON v.vacationId = f_v.vacationId
+`;
 
   const vacations = await dal.execute(sql);
 
