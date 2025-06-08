@@ -7,7 +7,7 @@ class Config {
   public isDevelopment = process.env.NODE_ENV === "development";
   public isProduction = process.env.NODE_ENV === "production";
   public port = 0;      // Node/Express
-  public sqlPort = 0;   // MySQL
+  public sqlPort = 0;   
   public sqlHost = "";
   public sqlUser = "";
   public sqlPassword = "";
@@ -16,7 +16,7 @@ class Config {
 
 class DevelopmentConfig extends Config {
   public port = +(process.env.PORT || 3000);           // Node/Express (3000)
-  public sqlPort = +(process.env.SQL_PORT || 3306);    // MySQL (3306)
+  public sqlPort = +(process.env.SQL_PORT || 26386);   
   public sqlHost = process.env.SQL_HOST || "localhost";
   public sqlUser = process.env.SQL_USER || "root";
   public sqlPassword = process.env.SQL_PASSWORD || "";
@@ -24,8 +24,8 @@ class DevelopmentConfig extends Config {
 }
 
 class ProductionConfig extends Config {
-  public port = +(process.env.PORT || 3000);           // גם בפרודקשן
-  public sqlPort = +(process.env.SQL_PORT || 3306);    // MySQL
+  public port = +(process.env.PORT || 3000);          
+  public sqlPort = +(process.env.SQL_PORT || 26386);    // MySQL
   public sqlHost = process.env.SQL_HOST || "";
   public sqlUser = process.env.SQL_USER || "";
   public sqlPassword = process.env.SQL_PASSWORD || "";
