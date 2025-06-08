@@ -23,6 +23,8 @@ async function getAllVacations(userId: number): Promise<VacationModel[]> {
 
   const vacations = await dal.execute(sql);
 
+  console.log(vacations, "vacations data");
+
   vacations.sort((a: any, b: any) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
   vacations.sort((a: any, b: any) => b.followState.localeCompare("Unfollow"));
 
