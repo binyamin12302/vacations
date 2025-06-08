@@ -12,6 +12,7 @@ const errors_model_1 = require("./4-models/errors-model");
 const socket_logic_1 = __importDefault(require("./5-logic/socket-logic"));
 const auth_controller_1 = __importDefault(require("./6-controllers/auth-controller"));
 const vacations_controller_1 = __importDefault(require("./6-controllers/vacations-controller"));
+console.log("=== backend server started ===");
 const expressServer = (0, express_1.default)();
 const clientUrl = process.env.NODE_ENV === "development"
     ? "http://localhost:3000"

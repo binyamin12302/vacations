@@ -26,8 +26,11 @@ const router = express_1.default.Router();
 router.get("/vacations", verify_logged_in_1.default, (request, response, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const getUserId = cyber_1.default.getUserId(request);
+        console.log("=== getUserId ===", getUserId);
         const vacations = yield vacations_logic_1.default.getAllVacations(getUserId);
+        console.log("=== vacations ===", vacations);
         response.json(vacations);
+        throw new Error("PRODUCTION TEST ERROR");
     }
     catch (error) {
         next(error);
