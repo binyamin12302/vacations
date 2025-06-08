@@ -16,7 +16,11 @@ router.get("/vacations",verifyLoggedIn, async (request: Request, response: Respo
 
     const getUserId = cyber.getUserId(request)
 
+    console.log("=== getUserId ===", getUserId);
+
     const vacations = await logic.getAllVacations(getUserId);
+
+    console.log("=== vacations ===", vacations);
 
     response.json(vacations);
 
