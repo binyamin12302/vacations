@@ -5,6 +5,7 @@ import CredentialsModel from "../4-models/credentials-model";
 import cyber from "../2-utils/cyber";
 import verifyLoggedIn from "../3-middleware/verify-logged-in";
 import FollowModel from "../4-models/follow-model";
+import dal from "../2-utils/dal";
 
 const router = express.Router();
 
@@ -81,5 +82,10 @@ router.delete("/auth/unfollow/:id([0-9]+)", verifyLoggedIn, async (request: Requ
   }
 });
 
+
+router.get("/api/dbtest", async (req, res) => {
+    const dbName = await dal.execute("SELECT DATABASE() as db");
+    res.json(dbName);
+});
 
 export default router;

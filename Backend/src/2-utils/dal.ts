@@ -10,6 +10,8 @@ const connection = mysql.createPool({
     port: config.sqlPort, // database port
 });
 
+console.log("DB SETTINGS:", config.sqlHost, config.sqlUser, config.sqlDatabase);
+
 function execute(sql: string, values?: any[]): Promise<any> { // Promisify
 
     return new Promise<any>((resolve, reject) => {
