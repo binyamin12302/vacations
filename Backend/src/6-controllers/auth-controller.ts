@@ -5,8 +5,6 @@ import CredentialsModel from "../4-models/credentials-model";
 import cyber from "../2-utils/cyber";
 import verifyLoggedIn from "../3-middleware/verify-logged-in";
 import FollowModel from "../4-models/follow-model";
-import dal from "../2-utils/dal";
-
 
 const router = express.Router();
 
@@ -37,9 +35,6 @@ router.post("/auth/login", async (request: Request, response: Response, next: Ne
     const token = await logic.login(credentials);
 
     response.json(token);
-
-    const dbName = await dal.execute("SELECT DATABASE() as db");
-    response.json(dbName);
 
   } catch (error: any) {
     next(error)
@@ -85,7 +80,6 @@ router.delete("/auth/unfollow/:id([0-9]+)", verifyLoggedIn, async (request: Requ
     next(error)
   }
 });
-
 
 
 export default router;

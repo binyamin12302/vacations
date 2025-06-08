@@ -21,11 +21,7 @@ async function getAllVacations(userId: number): Promise<VacationModel[]> {
                 GROUP BY vacationId
               ) AS f_v ON v.vacationId = f_v.vacationId`;
 
-              console.log("Executing SQL:", sql);
-
   const vacations = await dal.execute(sql);
-
-  console.log(vacations, "vacations");
 
   vacations.sort((a: any, b: any) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
   vacations.sort((a: any, b: any) => b.followState.localeCompare("Unfollow"));
