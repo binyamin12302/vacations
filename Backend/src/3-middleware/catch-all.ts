@@ -2,10 +2,14 @@ import { NextFunction, Request, Response } from "express";
 
 async function catchAll(err: any, request: Request, response: Response, next: NextFunction) {
 
+    if (response.headersSent) {
+        return;
+    }
+
     const status = err.status || 500;
     const message = err.message || "Unknown Error";
 
-    if(status === 500) {
+    if (status === 500) {
         // Log error to log file
     }
 

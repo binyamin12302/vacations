@@ -11,6 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 function catchAll(err, request, response, next) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (response.headersSent) {
+            return;
+        }
         const status = err.status || 500;
         const message = err.message || "Unknown Error";
         if (status === 500) {
