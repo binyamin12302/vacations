@@ -13,7 +13,6 @@ const connection = mysql2_1.default.createPool({
     database: config_1.default.sqlDatabase, // database name
     port: config_1.default.sqlPort, // database port
 });
-console.log("DB SETTINGS:", config_1.default.sqlHost, config_1.default.sqlUser, config_1.default.sqlDatabase);
 function execute(sql, values) {
     return new Promise((resolve, reject) => {
         connection.query(sql, values, (err, result) => {
