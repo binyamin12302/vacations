@@ -83,8 +83,6 @@ async function login(credentials: CredentialsModel): Promise<string> {
 
   const token = cyber.getNewToken(user)
 
-   
-
   return token;
 }
 

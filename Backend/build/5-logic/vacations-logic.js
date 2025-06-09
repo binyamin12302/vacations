@@ -19,7 +19,6 @@ const socket_logic_1 = __importDefault(require("./socket-logic"));
 // Get all vacations:
 function getAllVacations(userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("=== getAllVacations v2.1 ===");
         const sql = `SELECT 
               v.vacationId as id, v.destination, v.description, v.imageName, v.startDate,
               v.endDate, v.price,
