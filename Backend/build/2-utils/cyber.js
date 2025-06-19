@@ -11,8 +11,11 @@ const salt = "MakeThingsGoRight";
 function hash(plainText) {
     if (!plainText)
         return null;
-    // Hashing with salt: 
-    const hashText = crypto_1.default.createHmac("sha512", salt).update(plainText).digest("hex");
+    // Hashing with salt:
+    const hashText = crypto_1.default
+        .createHmac("sha512", salt)
+        .update(plainText)
+        .digest("hex");
     return hashText;
 }
 function getNewToken(user) {
@@ -20,20 +23,18 @@ function getNewToken(user) {
     const token = jsonwebtoken_1.default.sign(payload, secret, { expiresIn: "3h" });
     return token;
 }
-;
 function getUserId(request) {
-    // Extract token header (authorization: Bearer the-token): 
+    // Extract token header (authorization: Bearer the-token):
     const header = request.headers.authorization;
-    // Extract the token: 
+    // Extract the token:
     const token = header.substring(7);
-    // Extract payload: 
+    // Extract payload:
     const payload = jsonwebtoken_1.default.decode(token);
-    // Extract user: 
+    // Extract user:
     const user = payload.user;
-    // return role: 
+    // return role:
     return user.userId;
 }
-;
 function verifyToken(request) {
     return new Promise((resolve, reject) => {
         const header = request.headers.authorization;
@@ -42,7 +43,7 @@ function verifyToken(request) {
             return;
         }
         const token = header.substring(7);
-        // If no token sent: 
+        // If no token sent:
         if (!token) {
             reject(new errors_model_1.UnauthorizedError("No token sent"));
             return;
@@ -57,24 +58,22 @@ function verifyToken(request) {
         });
     });
 }
-;
 function getTokenRole(request) {
-    // Extract token header (authorization: Bearer the-token): 
+    // Extract token header (authorization: Bearer the-token):
     const header = request.headers.authorization;
-    // Extract the token: 
+    // Extract the token:
     const token = header.substring(7);
-    // Extract payload: 
+    // Extract payload:
     const payload = jsonwebtoken_1.default.decode(token);
-    // Extract user: 
+    // Extract user:
     const user = payload.user;
-    // return role: 
+    // return role:
     return user.roleId;
 }
-;
 exports.default = {
     getNewToken,
     verifyToken,
     getTokenRole,
     getUserId,
-    hash
+    hash,
 };

@@ -1,4 +1,3 @@
-import { Card } from "react-bootstrap";
 import "./HomeGuest.css";
 import pic1 from "../../../assets/images/pic/pic-1.jpg";
 import pic2 from "../../../assets/images/pic/pic-2.jpg";
@@ -63,8 +62,6 @@ function HomeGuest(): JSX.Element {
       image: pic8,
     },
   ];
-  
-
 
   return (
     <div className="HomeGuest">
@@ -92,31 +89,34 @@ function HomeGuest(): JSX.Element {
       </div>
 
       <section id="packages" className="secPad">
-  <div className="container">
-    <div className="heading text-center">
-      <h2>Most Popular Vacations</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
-    </div>
+        <div className="container">
+          <div className="heading text-center">
+            <h2>Most Popular Vacations</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>
+          </div>
 
-    <div className="vacation-grid">
-      {vacationCards.map((v, index) => (
-        <div className="cuadro_intro_hover" key={index} style={{ backgroundColor: "#cccccc" }}>
-          <p style={{ textAlign: "center" }}>
-            <img src={v.image} className="img-responsive" alt={v.title} />
-          </p>
-          <div className="caption">
-            <div className="blur"></div>
-            <div className="caption-text">
-              <h3>{v.title}</h3>
-              <p>{v.description}</p>
-            </div>
+          <div className="vacation-grid">
+            {vacationCards.map((v, index) => (
+              <div
+                className="cuadro_intro_hover"
+                key={index}
+                style={{ backgroundColor: "#cccccc" }}
+              >
+                <p style={{ textAlign: "center" }}>
+                  <img src={v.image} className="img-responsive" alt={v.title} />
+                </p>
+                <div className="caption">
+                  <div className="blur"></div>
+                  <div className="caption-text">
+                    <h3>{v.title}</h3>
+                    <p>{v.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
-
+      </section>
     </div>
   );
 }

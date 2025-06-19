@@ -22,8 +22,8 @@ class Config {
 class DevelopmentConfig extends Config {
     constructor() {
         super(...arguments);
-        this.port = +(process.env.PORT || 3000); // Node/Express (3000)
-        this.sqlPort = +(process.env.SQL_PORT || 26386);
+        this.port = +(process.env.PORT || 3001); // Node/Express
+        this.sqlPort = +(process.env.SQL_PORT || 3306); // MySQL default port
         this.sqlHost = process.env.SQL_HOST || "localhost";
         this.sqlUser = process.env.SQL_USER || "root";
         this.sqlPassword = process.env.SQL_PASSWORD || "";
@@ -41,5 +41,7 @@ class ProductionConfig extends Config {
         this.sqlDatabase = process.env.SQL_DATABASE || "";
     }
 }
-const config = process.env.NODE_ENV === "development" ? new DevelopmentConfig() : new ProductionConfig();
+const config = process.env.NODE_ENV === "development"
+    ? new DevelopmentConfig()
+    : new ProductionConfig();
 exports.default = config;

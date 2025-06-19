@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import VacationModel from "../../../Models/VacationModel";
 import vacationsService from "../../../Services/VacationsService";
 import notifyService from "../../../Services/NotifyService";
+import { useState } from "react";
 
 interface VacationEditProp {
   vacation: VacationModel;
@@ -11,8 +12,10 @@ interface VacationEditProp {
 }
 
 function EditVacation(props: VacationEditProp): JSX.Element {
-  const { register, setError, handleSubmit, formState } =
+  const { register, setError, handleSubmit, formState, setValue } =
     useForm<VacationModel>();
+
+  const today = new Date().toISOString().split("T")[0];
 
   const {
     destination,
@@ -24,13 +27,19 @@ function EditVacation(props: VacationEditProp): JSX.Element {
     followers,
     id,
   } = props.vacation;
+
   const showModalEdit = props.showModalEdit;
   const closModalEdit = props.closModalEdit;
 
-  const date = new Date().toISOString().split("T")[0];
+  const startDateDefault = startDate
+    ? new Date(startDate).toISOString().split("T")[0]
+    : "";
+  const endDateDefault = endDate
+    ? new Date(endDate).toISOString().split("T")[0]
+    : "";
 
-  const startDateFormat = new Date(startDate).toLocaleDateString("sv-SE");
-  const endDateFormat = new Date(endDate).toLocaleDateString("sv-SE");
+  const [selectedStartDate, setSelectedStartDate] =
+    useState<string>(startDateDefault);
 
   async function send(formVacation: VacationModel) {
     if (formVacation.image?.[0]?.name.length > 250) {
@@ -42,7 +51,6 @@ function EditVacation(props: VacationEditProp): JSX.Element {
       formVacation.id = id;
       formVacation.followState = followState;
       formVacation.followers = followers;
-    
 
       if (formVacation.startDate > formVacation.endDate) {
         return setError(
@@ -104,6 +112,8 @@ function EditVacation(props: VacationEditProp): JSX.Element {
           <Form.Control
             as="textarea"
             rows={3}
+            className="h-25"
+            maxLength={90}
             isInvalid={!!formState.errors.description}
             {...register("description", {
               required: { value: true, message: "Missing description" },
@@ -132,13 +142,17 @@ function EditVacation(props: VacationEditProp): JSX.Element {
         >
           <Form.Control
             type="date"
-            defaultValue={startDateFormat}
-            min={date}
+            defaultValue={startDateDefault}
+            min={today}
             max="2030-01-01"
             isInvalid={!!formState.errors.startDate}
             {...register("startDate", {
               required: { value: true, message: "Missing start-date" },
             })}
+            onChange={(e) => {
+              setSelectedStartDate(e.target.value);
+              setValue("endDate", "");
+            }}
           />
 
           <Form.Control.Feedback type="invalid">
@@ -153,8 +167,8 @@ function EditVacation(props: VacationEditProp): JSX.Element {
         >
           <Form.Control
             type="date"
-            defaultValue={endDateFormat}
-            min={date}
+            defaultValue={endDateDefault}
+            min={selectedStartDate || today}
             max="2030-01-01"
             isInvalid={!!formState.errors.endDate}
             {...register("endDate", {
@@ -162,6 +176,7 @@ function EditVacation(props: VacationEditProp): JSX.Element {
             })}
             className="mb-2"
             placeholder="End date"
+            disabled={!selectedStartDate}
           />
 
           <Form.Control.Feedback type="invalid">
@@ -191,7 +206,6 @@ function EditVacation(props: VacationEditProp): JSX.Element {
         </FloatingLabel>
 
         <Form.Label>Select Image</Form.Label>
-
         <Form.Control
           type="file"
           size="sm"

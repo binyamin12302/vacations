@@ -1,6 +1,4 @@
-/* ========================================
-   Typography and Headings
-======================================== */
+
 .HomeGuest h1 {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
@@ -17,9 +15,7 @@
   text-align: center;
 }
 
-/* ========================================
-   General Layout
-======================================== */
+
 .container {
   padding-right: 15px;
   padding-left: 15px;
@@ -31,9 +27,7 @@
   padding: 60px 0;
 }
 
-/* ========================================
-   Hero Section Background
-======================================== */
+
 .bg-overlay {
   background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("../../../assets/images/2.jpg");
   background-repeat: no-repeat;
@@ -44,9 +38,7 @@
   padding-top: 50px;
 }
 
-/* ========================================
-   Responsive Register Button
-======================================== */
+
 .responsive-button {
   padding: 10px 24px;
   font-size: 1.1rem;
@@ -66,9 +58,6 @@
   }
 }
 
-/* ========================================
-   Vacation Cards Grid Layout
-======================================== */
 .vacation-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -76,9 +65,7 @@
   margin-top: 40px;
 }
 
-/* ========================================
-   Vacation Cards + Hover Effect
-======================================== */
+
 .img-responsive {
   display: block;
   height: auto;
@@ -146,11 +133,21 @@
   color: #EBEBEB;
   line-height: 22px;
   margin: 0 0 10px;
-
   display: -webkit-box;
   -webkit-line-clamp: 4; 
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+@media (max-width: 576px) {
+  .HomeGuest h1 {
+    font-size: 2rem;
+  }
+  .HomeGuest h3 {
+    font-size: 1rem;
+  }
+}
+
 

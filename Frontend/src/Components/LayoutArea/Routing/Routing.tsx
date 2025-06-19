@@ -11,44 +11,51 @@ import HomeGuest from "../../HomeArea/HomeGuest/HomeGuest";
 import PageNotFound from "../PageNotFound/PageNotFound";
 
 function Routing(): JSX.Element {
-    const [admin, setAdmin] = useState<boolean>(false);
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(Boolean(localStorage.getItem("token")));
+  const [admin, setAdmin] = useState<boolean>(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
+    Boolean(localStorage.getItem("token"))
+  );
+  const [isReady, setIsReady] = useState(false);
 
-    useEffect(() => {
-        setAdmin(authService.isUserAdmin());
+  useEffect(() => {
+    setAdmin(authService.isUserAdmin());
+    setIsLoggedIn(Boolean(localStorage.getItem("token")));
+    setIsReady(true);
 
-        const unsubscribe = store.subscribe(() => {
-            setAdmin(authService.isUserAdmin());
-            setIsLoggedIn(Boolean(localStorage.getItem("token")));
-        });
+    const unsubscribe = store.subscribe(() => {
+      setAdmin(authService.isUserAdmin());
+      setIsLoggedIn(Boolean(localStorage.getItem("token")));
+    });
 
-        return () => unsubscribe();
-    }, []);
+    return () => unsubscribe();
+  }, []);
 
-    return (
-        <div className="Routing">
-            <Routes>
-                <Route path="*" element={<PageNotFound />} />
+  if (!isReady) {
+    return <div className="text-center m-5">Loading...</div>;
+  }
 
-                {isLoggedIn ? (
-                    <>
-                        <Route path="/logout" element={<Logout />} />
-                        <Route path="/" element={<Home />} />
-                    </>
-                ) : (
-                    <>
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/home" element={<HomeGuest />} />
-                        <Route path="/" element={<Navigate to="/home" />} />
-                    </>
-                )}
-
-                {admin && <Route path="/chart" element={<Chart />} />}
-            </Routes>
-        </div>
-    );
+  return (
+    <div className="Routing">
+      <Routes>
+        {isLoggedIn ? (
+          <>
+            <Route path="/logout" element={<Logout />} />
+            <Route path="/" element={<Home />} />
+            {admin && <Route path="/chart" element={<Chart />} />}
+            <Route path="*" element={<PageNotFound />} />
+          </>
+        ) : (
+          <>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<HomeGuest />} />
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="*" element={<PageNotFound />} />
+          </>
+        )}
+      </Routes>
+    </div>
+  );
 }
-
 
 export default Routing;

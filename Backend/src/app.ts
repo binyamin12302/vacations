@@ -8,8 +8,6 @@ import socketLogic from "./5-logic/socket-logic";
 import authController from "./6-controllers/auth-controller";
 import vacationController from "./6-controllers/vacations-controller";
 
-
-
 const expressServer = express();
 
 const clientUrl = process.env.NODE_ENV === "development"

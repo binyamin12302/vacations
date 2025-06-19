@@ -27,11 +27,23 @@ function register(user) {
         user.password = cyber_1.default.hash(user.password);
         user.roleId = role_model_1.default.User;
         const sql = `INSERT INTO users VALUES (DEFAULT, ?, ?,?, ?,?)`;
-        const values = [user.firstName, user.lastName, user.username, user.password, user.roleId];
+        const values = [
+            user.firstName,
+            user.lastName,
+            user.username,
+            user.password,
+            user.roleId,
+        ];
         const info = yield dal_1.default.execute(sql, values);
         user.userId = info.insertId;
-        delete user.password;
-        const token = cyber_1.default.getNewToken(user);
+        const userForToken = {
+            userId: user.userId,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            roleId: Number(user.roleId),
+        };
+        const token = cyber_1.default.getNewToken(userForToken);
         return token;
     });
 }
@@ -56,8 +68,14 @@ function login(credentials) {
         if (!users[0])
             throw new errors_model_1.UnauthorizedError("Incorrect username or password");
         const user = users[0];
-        delete user.password;
-        const token = cyber_1.default.getNewToken(user);
+        const userForToken = {
+            userId: user.userId,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            roleId: user.roleId,
+        };
+        const token = cyber_1.default.getNewToken(userForToken);
         return token;
     });
 }
@@ -76,7 +94,7 @@ function unfollowVacation(follow) {
         const result = yield dal_1.default.execute(sql);
         if (result.affectedRows === 0)
             throw new errors_model_1.ResourceNotFoundError(follow.vacationId);
-        socket_logic_1.default.reportunfollowVacation(follow);
+        socket_logic_1.default.reportUnfollowVacation(follow);
     });
 }
 function isVacationExist(vacationId) {
@@ -92,5 +110,5 @@ exports.default = {
     register,
     login,
     followVacation,
-    unfollowVacation
+    unfollowVacation,
 };

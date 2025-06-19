@@ -19,6 +19,7 @@ function Home(): JSX.Element {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [vacationsPerPage] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const handleCloseModalAddVacation = () => setModalAddVacation(false);
   const handleShowModalAddVacation = () => setModalAddVacation(true);
@@ -53,6 +54,10 @@ function Home(): JSX.Element {
     };
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   async function handleFollowVacation(
     follow: FollowModel,
     isFollowing: string
@@ -72,60 +77,121 @@ function Home(): JSX.Element {
     }
   }
 
+  const filteredVacations = vacations.filter(
+    (vacation) =>
+      vacation.destination?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      vacation.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const indexOfLastVacation = currentPage * vacationsPerPage;
   const indexOfFirstVacation = indexOfLastVacation - vacationsPerPage;
-  const currentVacations = vacations.slice(
+  const currentVacations = filteredVacations.slice(
     indexOfFirstVacation,
     indexOfLastVacation
   );
 
-  const cardsToShow = loading && vacations.length === 0
-    ? Array(vacationsPerPage).fill(null)
-    : currentVacations;
+  const cardsToShow =
+    loading && vacations.length === 0
+      ? Array(vacationsPerPage).fill(null)
+      : currentVacations;
 
   return (
     <Container className="Home p-2">
-      {authService.isUserAdmin() && (
-        <div className="col-md-12 adm text-center">
-          <Button
-            variant="light"
-            className="border btn-vac border-secondary shadow-none"
-            onClick={handleShowModalAddVacation}
-          >
-            Add Vacation
-          </Button>
-          <NavLink
-            className="btn btn-secondary text-white shadow-none"
-            to="/chart"
-          >
-            Go to the Chart
-          </NavLink>
-          <Modal
-            show={showModalAddVacation}
-            onHide={handleCloseModalAddVacation}
-          >
-            <AddVacation showModalAddVacation={setModalAddVacation} />
-          </Modal>
+      <div className="admin-actions-wrapper">
+        {authService.isUserAdmin() && (
+          <>
+            <div className="admin-actions-btns">
+              <Button
+                variant="light"
+                className="border btn-vac border-secondary shadow-none"
+                onClick={handleShowModalAddVacation}
+              >
+                Add Vacation
+              </Button>
+              <NavLink
+                className="btn btn-secondary text-white shadow-none"
+                
+                to="/chart"
+              >
+                Go to the Chart
+              </NavLink>
+            </div>
+            <Modal
+              show={showModalAddVacation}
+              onHide={handleCloseModalAddVacation}
+            >
+              <AddVacation showModalAddVacation={setModalAddVacation} />
+            </Modal>
+            <div className="admin-divider"></div>
+          </>
+        )}
+
+        <div className="d-flex justify-content-center my-3">
+          <div className="search-box position-relative">
+            <span className="search-icon position-absolute top-50 start-0 translate-middle-y ps-3">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="#adb5bd"
+                className="bi bi-search"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.442 1.398a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
+              </svg>
+            </span>
+
+            <input
+              type="text"
+              className="form-control search-input ps-5"
+              placeholder="Search vacations..."
+              style={{ width: "100%" }}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              autoComplete="off"
+            />
+          </div>
         </div>
-      )}
+      </div>
 
       <Row xs={1} sm={1} md={2} lg={3} xl={5} className="g-4 m-auto">
         {cardsToShow.map((v, i) => (
           <VacationCard
             key={v ? v.id : i}
-            vacation={v || {}} 
+            vacation={v || {}}
             handleFollow={handleFollowVacation}
             loading={loading && vacations.length === 0}
           />
         ))}
       </Row>
 
-      <Pagination
-        vacationsPerPage={vacationsPerPage}
-        totalVacations={vacations.length}
-        paginate={setCurrentPage}
-        currentPage={currentPage}
-      />
+      {!loading && filteredVacations.length === 0 && (
+        <div className="text-center my-5">
+          <div className="display-6 text-muted mb-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              fill="#adb5bd"
+              className="bi bi-search mb-2"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.442 1.398a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
+            </svg>
+            <div>No results found.</div>
+          </div>
+          <div className="text-muted">Try a different search.</div>
+        </div>
+      )}
+
+      {filteredVacations.length > 0 && (
+        <Pagination
+          vacationsPerPage={vacationsPerPage}
+          totalVacations={filteredVacations.length}
+          paginate={setCurrentPage}
+          currentPage={currentPage}
+        />
+      )}
     </Container>
   );
 }
