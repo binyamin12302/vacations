@@ -31,10 +31,10 @@ function getAllVacations(userId) {
                 SELECT vacationId, COUNT(vacationId) AS followers
                 FROM followers
                 GROUP BY vacationId
-              ) AS f_v ON v.vacationId = f_v.vacationId`;
+              ) AS f_v ON v.vacationId = f_v.vacationId 
+                ORDER BY v.vacationId DESC; 
+                `;
         const vacations = yield dal_1.default.execute(sql);
-        vacations.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-        vacations.sort((a, b) => b.followState.localeCompare("Unfollow"));
         return vacations;
     });
 }
@@ -58,7 +58,7 @@ function addVacation(vacation) {
             vacation.imageName,
             vacation.startDate,
             vacation.endDate,
-            vacation.price
+            vacation.price,
         ];
         const result = yield dal_1.default.execute(sql, values);
         vacation.id = result.insertId;
@@ -107,7 +107,7 @@ function updateFullVacation(vacation) {
             vacation.startDate,
             vacation.endDate,
             vacation.price,
-            vacation.id
+            vacation.id,
         ];
         const result = yield dal_1.default.execute(sql, values);
         socket_logic_1.default.reportUpdateVacation(vacation);
@@ -137,7 +137,14 @@ function updatePartialVacation(vacation) {
         }
         const values = [];
         const fieldsToUpdate = [];
-        const fields = ["description", "destination", "startDate", "endDate", "price", "imageName"];
+        const fields = [
+            "description",
+            "destination",
+            "startDate",
+            "endDate",
+            "price",
+            "imageName",
+        ];
         for (const field of fields) {
             if (vacation[field] !== undefined) {
                 fieldsToUpdate.push(`${field} = ?`);
@@ -169,5 +176,5 @@ exports.default = {
     addVacation,
     updateFullVacation,
     deleteVacation,
-    updatePartialVacation
+    updatePartialVacation,
 };

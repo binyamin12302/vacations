@@ -120,7 +120,7 @@ function Home(): JSX.Element {
               show={showModalAddVacation}
               onHide={handleCloseModalAddVacation}
             >
-              <AddVacation showModalAddVacation={setModalAddVacation} />
+              <AddVacation showModalAddVacation={setModalAddVacation} onVacationAdded={() => setCurrentPage(1)} />
             </Modal>
             <div className="admin-divider"></div>
           </>

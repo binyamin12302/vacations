@@ -2,7 +2,10 @@ import { uploadImage, deleteImage } from "./upload-logic";
 import { OkPacket } from "mysql";
 import dal from "../2-utils/dal";
 import VacationModel from "../4-models/vacation-model";
-import { ResourceNotFoundError, ValidationError } from "../4-models/errors-model";
+import {
+  ResourceNotFoundError,
+  ValidationError,
+} from "../4-models/errors-model";
 import socketLogic from "./socket-logic";
 
 // Get all vacations:
@@ -19,12 +22,11 @@ async function getAllVacations(userId: number): Promise<VacationModel[]> {
                 SELECT vacationId, COUNT(vacationId) AS followers
                 FROM followers
                 GROUP BY vacationId
-              ) AS f_v ON v.vacationId = f_v.vacationId`;
+              ) AS f_v ON v.vacationId = f_v.vacationId 
+                ORDER BY v.vacationId DESC; 
+                `;
 
   const vacations = await dal.execute(sql);
-
-  vacations.sort((a: any, b: any) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
-  vacations.sort((a: any, b: any) => b.followState.localeCompare("Unfollow"));
 
   return vacations;
 }
@@ -50,7 +52,7 @@ async function addVacation(vacation: VacationModel): Promise<VacationModel> {
     vacation.imageName,
     vacation.startDate,
     vacation.endDate,
-    vacation.price
+    vacation.price,
   ];
 
   const result: OkPacket = await dal.execute(sql, values);
@@ -80,7 +82,9 @@ async function getPreviousImage(id: number): Promise<string> {
 }
 
 // Update full vacation:
-async function updateFullVacation(vacation: VacationModel): Promise<VacationModel> {
+async function updateFullVacation(
+  vacation: VacationModel
+): Promise<VacationModel> {
   const errors = vacation.validatePut();
   if (errors) throw new ValidationError(errors);
 
@@ -102,7 +106,7 @@ async function updateFullVacation(vacation: VacationModel): Promise<VacationMode
     vacation.startDate,
     vacation.endDate,
     vacation.price,
-    vacation.id
+    vacation.id,
   ];
 
   const result: OkPacket = await dal.execute(sql, values);
@@ -115,7 +119,9 @@ async function updateFullVacation(vacation: VacationModel): Promise<VacationMode
 }
 
 // Update partial vacation:
-async function updatePartialVacation(vacation: VacationModel): Promise<VacationModel> {
+async function updatePartialVacation(
+  vacation: VacationModel
+): Promise<VacationModel> {
   const errors = vacation.validatePatch();
   if (errors) throw new ValidationError(errors);
 
@@ -138,7 +144,14 @@ async function updatePartialVacation(vacation: VacationModel): Promise<VacationM
   const values = [];
   const fieldsToUpdate = [];
 
-  const fields = ["description", "destination", "startDate", "endDate", "price", "imageName"];
+  const fields = [
+    "description",
+    "destination",
+    "startDate",
+    "endDate",
+    "price",
+    "imageName",
+  ];
 
   for (const field of fields) {
     if (vacation[field] !== undefined) {
@@ -147,7 +160,9 @@ async function updatePartialVacation(vacation: VacationModel): Promise<VacationM
     }
   }
 
-  const sql = `UPDATE vacations SET ${fieldsToUpdate.join(", ")} WHERE vacationId = ?`;
+  const sql = `UPDATE vacations SET ${fieldsToUpdate.join(
+    ", "
+  )} WHERE vacationId = ?`;
   values.push(vacation.id);
 
   const result: OkPacket = await dal.execute(sql, values);
@@ -176,5 +191,5 @@ export default {
   addVacation,
   updateFullVacation,
   deleteVacation,
-  updatePartialVacation
+  updatePartialVacation,
 };

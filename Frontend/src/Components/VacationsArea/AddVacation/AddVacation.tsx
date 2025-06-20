@@ -8,6 +8,7 @@ import vacationsService from "../../../Services/VacationsService";
 
 interface VacationAddProp {
   showModalAddVacation?: Function;
+  onVacationAdded?: () => void;
 }
 
 function AddVacation(props: VacationAddProp): JSX.Element {
@@ -37,6 +38,7 @@ function AddVacation(props: VacationAddProp): JSX.Element {
     try {
       setLoading(true);
       await vacationsService.addVacation(formVacation);
+      if (props.onVacationAdded) props.onVacationAdded();
       props.showModalAddVacation(false);
       notifyService.success("The vacation was successfully added.");
     } catch (err: any) {
