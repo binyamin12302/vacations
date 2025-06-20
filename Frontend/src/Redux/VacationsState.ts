@@ -56,7 +56,7 @@ export function vacationsReducer(currentState: VacationsState = new VacationsSta
       const isVacationExist = newState.vacations.find(v => v.id === action.payload.id)
 
       if (isVacationExist === undefined) {
-        newState.vacations.push(dupAddVacation);
+        newState.vacations.unshift(dupAddVacation);
       }
 
       break;
