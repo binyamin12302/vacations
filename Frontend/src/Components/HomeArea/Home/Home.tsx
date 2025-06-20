@@ -77,12 +77,6 @@ function Home(): JSX.Element {
     }
   }
 
-  function handleVacationAdded(newVacation: VacationModel) {
-  setVacation(prevVacations => [newVacation, ...prevVacations]);
-  setCurrentPage(1); // מחזיר לעמוד הראשון
-}
-
-
   const filteredVacations = vacations.filter(
     (vacation) =>
       vacation.destination?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -116,6 +110,7 @@ function Home(): JSX.Element {
               </Button>
               <NavLink
                 className="btn btn-secondary text-white shadow-none"
+                
                 to="/chart"
               >
                 Go to the Chart
@@ -125,10 +120,7 @@ function Home(): JSX.Element {
               show={showModalAddVacation}
               onHide={handleCloseModalAddVacation}
             >
-              <AddVacation
-                showModalAddVacation={setModalAddVacation}
-                onVacationAdded={handleVacationAdded}
-              />
+              <AddVacation showModalAddVacation={setModalAddVacation} />
             </Modal>
             <div className="admin-divider"></div>
           </>
