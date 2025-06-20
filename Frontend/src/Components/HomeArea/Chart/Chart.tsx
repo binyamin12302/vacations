@@ -93,7 +93,7 @@ function Chart(): JSX.Element {
       <Container className="Chart">
         <div
           className="d-flex flex-column align-items-center justify-content-center"
-          style={{ minHeight: "40vh" }}
+          style={{ minHeight: "70vh" }}
         >
           <div
             className="mb-4 p-4 rounded-3 shadow-sm border"

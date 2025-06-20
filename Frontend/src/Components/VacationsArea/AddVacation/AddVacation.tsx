@@ -8,6 +8,7 @@ import vacationsService from "../../../Services/VacationsService";
 
 interface VacationAddProp {
   showModalAddVacation?: Function;
+  onVacationAdded?: (vacation: VacationModel) => void;
 }
 
 function AddVacation(props: VacationAddProp): JSX.Element {
@@ -36,7 +37,10 @@ function AddVacation(props: VacationAddProp): JSX.Element {
 
     try {
       setLoading(true);
-      await vacationsService.addVacation(formVacation);
+      const addedVacation = await vacationsService.addVacation(formVacation);
+      if (props.onVacationAdded) {
+        props.onVacationAdded(addedVacation);
+      }
       props.showModalAddVacation(false);
       notifyService.success("The vacation was successfully added.");
     } catch (err: any) {
@@ -46,7 +50,7 @@ function AddVacation(props: VacationAddProp): JSX.Element {
   }
 
   return (
-    <div className="AddVacation ">
+    <div className="AddVacation">
       <Modal.Header closeButton>
         <Modal.Title>Add Vacation</Modal.Title>
       </Modal.Header>
@@ -62,6 +66,7 @@ function AddVacation(props: VacationAddProp): JSX.Element {
         >
           <Form.Control
             type="text"
+            maxLength={30}
             isInvalid={!!formState.errors.destination}
             {...register("destination", {
               required: { value: true, message: "Missing destination" },
@@ -89,6 +94,8 @@ function AddVacation(props: VacationAddProp): JSX.Element {
           <Form.Control
             as="textarea"
             rows={3}
+            maxLength={90}
+            style={{ height: "90px", resize: "none" }}
             isInvalid={!!formState.errors.description}
             {...register("description", {
               required: { value: true, message: "Missing description" },

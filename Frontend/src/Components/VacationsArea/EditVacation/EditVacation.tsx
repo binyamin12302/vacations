@@ -1,4 +1,4 @@
-import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
+import { Button, FloatingLabel, Form, Modal, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import VacationModel from "../../../Models/VacationModel";
 import vacationsService from "../../../Services/VacationsService";
@@ -14,6 +14,7 @@ interface VacationEditProp {
 function EditVacation(props: VacationEditProp): JSX.Element {
   const { register, setError, handleSubmit, formState, setValue } =
     useForm<VacationModel>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -62,12 +63,13 @@ function EditVacation(props: VacationEditProp): JSX.Element {
           { shouldFocus: true }
         );
       }
-
+      setLoading(true);
       await vacationsService.updateVacation(formVacation);
 
       showModalEdit(false);
     } catch (err: any) {
       alert(err.message);
+      setLoading(false);
     }
   }
 
@@ -225,7 +227,19 @@ function EditVacation(props: VacationEditProp): JSX.Element {
           </Button>
 
           <Button type="submit" className="shadow-none" variant="primary">
-            Yes
+            {!loading ? (
+              "Yes"
+            ) : (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                />
+              </>
+            )}
           </Button>
         </Modal.Footer>
       </Form>
