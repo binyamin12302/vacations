@@ -2,18 +2,18 @@ import { useEffect } from "react";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import Routing from "../Routing/Routing";
-
 import "./Layout.css";
-import notifyService from "../../../Services/NotifyService";
+import { useNavigate } from "react-router-dom";
+import { setNavigate } from "../../SharedArea/Navigator/Navigator";
 
 function Layout(): JSX.Element {
+
+
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const message = localStorage.getItem("sessionMessage");
-    if (message) {
-      notifyService.error(message);
-      localStorage.removeItem("sessionMessage");
-    }
-  }, []);
+    setNavigate(navigate);
+  }, [navigate]);
 
   return (
     <div className="Layout ">
