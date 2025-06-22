@@ -33,6 +33,17 @@ function Login(): JSX.Element {
       >
         <h3 className="mb-3 text-center">Login</h3>
 
+        <div
+          className="alert alert-info py-2 text-center small mb-4"
+          style={{ maxWidth: 430, margin: "0 auto" }}
+        >
+          <span role="img" aria-label="clock">
+            🕒
+          </span>
+          The first login or data fetch may take a few seconds due to free-tier
+          hosting (Render &amp; Aiven).
+        </div>
+
         <Form.Group className="mb-3">
           <Form.Label>Username</Form.Label>
           <Form.Control
