@@ -6,6 +6,7 @@ import CredentialsModel from "../../../Models/CredentialsModel";
 import authService from "../../../Services/AuthService";
 import notifyService from "../../../Services/NotifyService";
 import "../AuthForm.css";
+import "./Login.css";
 
 function Login(): JSX.Element {
   const navigate = useNavigate();
@@ -14,13 +15,14 @@ function Login(): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
 
   async function send(credentials: CredentialsModel) {
+    setLoading(true);
     try {
-      setLoading(true);
       await authService.login(credentials);
       notifyService.success("You have been successfully logged-in.");
       navigate("/");
     } catch (err: any) {
       notifyService.error(err);
+    } finally {
       setLoading(false);
     }
   }
@@ -33,17 +35,23 @@ function Login(): JSX.Element {
       >
         <h3 className="mb-3 text-center">Login</h3>
 
-        <div
-          className="alert alert-info py-2 text-center small mb-4"
-          style={{ maxWidth: 430, margin: "0 auto" }}
-        >
+
+        <div className="login-note login-note-hosting">
           <span role="img" aria-label="clock">
             🕒
-          </span>
-          The first login or data fetch may take a few seconds due to free-tier
-          hosting (Render &amp; Aiven).
+          </span>{" "}
+          First login may be slow (free hosting).
+        </div>
+        <div className="login-note login-note-admin">
+          <span role="img" aria-label="admin">
+            🛡️
+          </span>{" "}
+          <b>Demo Admin:</b>
+          <span className="login-demo-user">ronaldo_nazario</span>
+          <span className="login-demo-pass">/ Aa11!!Bb</span>
         </div>
 
+        {/* Username */}
         <Form.Group className="mb-3">
           <Form.Label>Username</Form.Label>
           <Form.Control
@@ -58,6 +66,7 @@ function Login(): JSX.Element {
           </Form.Control.Feedback>
         </Form.Group>
 
+        {/* Password */}
         <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
           <InputGroup>
