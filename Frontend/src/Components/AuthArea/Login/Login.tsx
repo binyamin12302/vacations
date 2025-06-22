@@ -1,5 +1,5 @@
-import {  useState } from "react";
-import { Button, Form, Spinner } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
 import CredentialsModel from "../../../Models/CredentialsModel";
@@ -11,6 +11,7 @@ function Login(): JSX.Element {
   const navigate = useNavigate();
   const { register, handleSubmit, formState } = useForm<CredentialsModel>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function send(credentials: CredentialsModel) {
     try {
@@ -48,15 +49,26 @@ function Login(): JSX.Element {
 
         <Form.Group className="mb-3">
           <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Password"
-            isInvalid={!!formState.errors.password}
-            {...register("password", {
-              required: { value: true, message: "Missing password" },
-            })}
-          />
-          <Form.Control.Feedback type="invalid">
+          <InputGroup>
+            <Form.Control
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              isInvalid={!!formState.errors.password}
+              {...register("password", {
+                required: { value: true, message: "Missing password" },
+              })}
+            />
+            <InputGroup.Text
+              onClick={() => setShowPassword((prev) => !prev)}
+              style={{ cursor: "pointer", background: "white" }}
+              title={showPassword ? "Hide password" : "Show password"}
+            >
+              <i
+                className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}
+              ></i>
+            </InputGroup.Text>
+          </InputGroup>
+          <Form.Control.Feedback type="invalid" style={{ display: "block" }}>
             {formState.errors.password?.message}
           </Form.Control.Feedback>
         </Form.Group>

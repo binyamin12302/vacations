@@ -21,10 +21,36 @@
 .VacationCard .card-text {
   flex-grow: 1;
   overflow: auto;
-  max-height: 100px; 
+  max-height: 100px;
   margin-bottom: 0.5rem;
 }
 
 .VacationCard .badge {
   margin-bottom: 0.5rem;
+}
+
+.VacationCard .image-frame {
+  border: 1.5px solid #e0e5ec;
+  border-radius: 8px;
+  background: #f9fafb;
+  box-shadow: 0 2px 8px rgba(60, 60, 60, 0.04);
+  padding: 4px;
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  transition: border-color 0.2s;
+}
+
+.VacationCard .image-frame:hover {
+  border-color: #bfc6d1;
+}
+
+.VacationCard .card-img-top {
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #e5e7eb;
 }

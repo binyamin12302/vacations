@@ -78,15 +78,7 @@ function VacationCard(props: VacationCardProps): JSX.Element {
   return (
     <Col className="dc VacationCard d-flex justify-content-center mb-2 p-3">
       <Card className="shadow dd" style={cardStyle}>
-        <div
-          style={{
-            position: "relative",
-            height: 180,
-            width: "100%",
-            overflow: "hidden",
-            background: "#e0e0e0",
-          }}
-        >
+        <div className="image-frame">
           {(!imageLoaded || props.loading) && (
             <Skeleton
               height={180}
@@ -109,7 +101,7 @@ function VacationCard(props: VacationCardProps): JSX.Element {
                 width: "100%",
                 height: "100%",
                 opacity: imageLoaded && !props.loading ? 1 : 0,
-                transition: "opacity 0.3s"
+                transition: "opacity 0.3s",
               }}
               onLoad={() => setImageLoaded(true)}
               alt={destination}

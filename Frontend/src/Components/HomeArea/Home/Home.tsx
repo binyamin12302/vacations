@@ -12,21 +12,42 @@ import Pagination from "../../SharedArea/Pagination/Pagination";
 import AddVacation from "../../VacationsArea/AddVacation/AddVacation";
 import VacationCard from "../../VacationsArea/VacationCard/VacationCard";
 import "./Home.css";
+import notifyService from "../../../Services/NotifyService";
 
 function Home(): JSX.Element {
   const [vacations, setVacation] = useState<VacationModel[]>([]);
   const [showModalAddVacation, setModalAddVacation] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [vacationsPerPage] = useState<number>(10);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
+  // Init from localStorage
+  const getSortByFromStorage = () =>
+    localStorage.getItem("vacation-sortBy") || "startDate-asc";
+  const getCurrentPageFromStorage = () =>
+    Number(localStorage.getItem("vacation-currentPage")) || 1;
+
+  const [sortBy, setSortBy] = useState<string>(getSortByFromStorage());
+  const [currentPage, setCurrentPage] = useState<number>(
+    getCurrentPageFromStorage()
+  );
+
   const handleCloseModalAddVacation = () => setModalAddVacation(false);
   const handleShowModalAddVacation = () => setModalAddVacation(true);
 
+  // Persist sortBy
+  useEffect(() => {
+    localStorage.setItem("vacation-sortBy", sortBy);
+  }, [sortBy]);
+
+  // Persist currentPage
+  useEffect(() => {
+    localStorage.setItem("vacation-currentPage", String(currentPage));
+  }, [currentPage]);
+
+  // Fetch vacations & subscribe
   useEffect(() => {
     socketService.connect();
-
     const unsubscribe = store.subscribe(() => {
       const dup = [...store.getState().vacationsState.vacations];
       setVacation(dup);
@@ -39,7 +60,14 @@ function Home(): JSX.Element {
         .then((vacationList) => {
           store.dispatch(fetchVacationsAction(vacationList));
         })
-        .catch((err) => console.log(err.message))
+        .catch((err) => {
+          console.log(err.message);
+          if (err?.response?.status !== 401 && err?.response?.status !== 403) {
+            notifyService.error(
+              "Failed to fetch vacations. Please try again later."
+            );
+          }
+        })
         .finally(() => setLoading(false));
     } else {
       const dup = [...store.getState().vacationsState.vacations];
@@ -49,14 +77,9 @@ function Home(): JSX.Element {
 
     return () => {
       unsubscribe();
-      store.dispatch(fetchVacationsAction([]));
       socketService.disconnect();
     };
   }, []);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
 
   async function handleFollowVacation(
     follow: FollowModel,
@@ -74,6 +97,36 @@ function Home(): JSX.Element {
       }
     } catch (err: any) {
       console.log(err);
+      notifyService.error("Failed to follow/unfollow. Please try again.");
+    }
+  }
+
+  function sortVacations(
+    vacations: VacationModel[],
+    sortBy: string
+  ): VacationModel[] {
+    const arr = [...vacations];
+    switch (sortBy) {
+      case "startDate-asc":
+        return arr.sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        );
+      case "startDate-desc":
+        return arr.sort(
+          (a, b) =>
+            new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
+        );
+      case "followers-desc":
+        return arr.sort((a, b) => (b.followers ?? 0) - (a.followers ?? 0));
+      case "followers-asc":
+        return arr.sort((a, b) => (a.followers ?? 0) - (b.followers ?? 0));
+      case "price-asc":
+        return arr.sort((a, b) => (a.price ?? 0) - (b.price ?? 0));
+      case "price-desc":
+        return arr.sort((a, b) => (b.price ?? 0) - (a.price ?? 0));
+      default:
+        return arr;
     }
   }
 
@@ -83,9 +136,11 @@ function Home(): JSX.Element {
       vacation.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const sortedVacations = sortVacations(filteredVacations, sortBy);
+
   const indexOfLastVacation = currentPage * vacationsPerPage;
   const indexOfFirstVacation = indexOfLastVacation - vacationsPerPage;
-  const currentVacations = filteredVacations.slice(
+  const currentVacations = sortedVacations.slice(
     indexOfFirstVacation,
     indexOfLastVacation
   );
@@ -110,7 +165,6 @@ function Home(): JSX.Element {
               </Button>
               <NavLink
                 className="btn btn-secondary text-white shadow-none"
-                
                 to="/chart"
               >
                 Go to the Chart
@@ -120,13 +174,16 @@ function Home(): JSX.Element {
               show={showModalAddVacation}
               onHide={handleCloseModalAddVacation}
             >
-              <AddVacation showModalAddVacation={setModalAddVacation} onVacationAdded={() => setCurrentPage(1)} />
+              <AddVacation
+                showModalAddVacation={setModalAddVacation}
+                onVacationAdded={() => setCurrentPage(1)}
+              />
             </Modal>
             <div className="admin-divider"></div>
           </>
         )}
 
-        <div className="d-flex justify-content-center my-3">
+        <div className="d-flex justify-content-center my-3 gap-2 flex-wrap ">
           <div className="search-box position-relative">
             <span className="search-icon position-absolute top-50 start-0 translate-middle-y ps-3">
               <svg
@@ -140,16 +197,37 @@ function Home(): JSX.Element {
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.442 1.398a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
               </svg>
             </span>
-
             <input
               type="text"
               className="form-control search-input ps-5"
               placeholder="Search vacations..."
+              aria-label="Search vacations"
               style={{ width: "100%" }}
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
               autoComplete="off"
             />
+          </div>
+          <div>
+            <select
+              className="form-select sort-dropdown mt-3 shadow-none"
+              style={{ minWidth: 190, maxWidth: 220 }}
+              value={sortBy}
+              onChange={(e) => {
+                setSortBy(e.target.value);
+                setCurrentPage(1); // Reset to first page on sort change
+              }}
+            >
+              <option value="startDate-asc">Date: Nearest first</option>
+              <option value="startDate-desc">Date: Furthest first</option>
+              <option value="followers-desc">Followers: Most first</option>
+              <option value="followers-asc">Followers: Least first</option>
+              <option value="price-asc">Price: Lowest first</option>
+              <option value="price-desc">Price: Highest first</option>
+            </select>
           </div>
         </div>
       </div>
@@ -166,21 +244,29 @@ function Home(): JSX.Element {
       </Row>
 
       {!loading && filteredVacations.length === 0 && (
-        <div className="text-center my-5">
-          <div className="display-6 text-muted mb-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              fill="#adb5bd"
-              className="bi bi-search mb-2"
-              viewBox="0 0 16 16"
-            >
-              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.442 1.398a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
-            </svg>
-            <div>No results found.</div>
+        <div className="d-flex justify-content-center">
+          <div className="vacations-empty-state text-center">
+            <div className="display-6">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="#adb5bd"
+                className="bi bi-search"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85zm-5.442 1.398a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z" />
+              </svg>
+              <div>
+                {searchTerm
+                  ? "No results found. Try a different search."
+                  : "No vacations available at the moment."}
+              </div>
+            </div>
+            <div className="sub-message">
+              {searchTerm
+                ? "We couldn’t find any vacations matching your search."
+                : "Add a new vacation or check back later."}
+            </div>
           </div>
-          <div className="text-muted">Try a different search.</div>
         </div>
       )}
 

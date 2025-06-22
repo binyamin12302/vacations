@@ -35,7 +35,7 @@ function Pagination(props: VacationPaginationProps): JSX.Element {
         <li
           className={`page-item ${props.currentPage === 1 ? "disabled" : ""}`}
         >
-          <button onClick={handlePrev} className="page-link">
+          <button onClick={handlePrev} className="page-link shadow-none">
             Previous
           </button>
         </li>
@@ -64,7 +64,7 @@ function Pagination(props: VacationPaginationProps): JSX.Element {
             props.currentPage === totalPages ? "disabled" : ""
           }`}
         >
-          <button onClick={handleNext} className="page-link">
+          <button onClick={handleNext} className="page-link shadow-none">
             Next
           </button>
         </li>

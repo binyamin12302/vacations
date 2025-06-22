@@ -25,18 +25,31 @@ class UserModel {
 }
 UserModel.postValidationSchema = joi_1.default.object({
     userId: joi_1.default.forbidden(),
-    firstName: joi_1.default.string().required().min(2).max(30),
-    lastName: joi_1.default.string().required().min(2).max(30),
-    username: joi_1.default.string().min(8).max(40).required(),
-    password: joi_password_1.joiPassword.string()
+    firstName: joi_1.default.string()
+        .required()
+        .min(2)
+        .max(30)
+        .pattern(/^[A-Za-zא-ת\s\-]+$/),
+    lastName: joi_1.default.string()
+        .required()
+        .min(2)
+        .max(30)
+        .pattern(/^[A-Za-zא-ת\s\-']+$/),
+    username: joi_1.default.string()
         .min(8)
         .max(30)
-        .minOfLowercase(2)
-        .minOfUppercase(2)
-        .minOfNumeric(2)
+        .required()
+        .pattern(/^[A-Za-zא-ת0-9_-]+$/),
+    password: joi_password_1.joiPassword
+        .string()
+        .min(8)
+        .max(30)
+        .minOfLowercase(1)
+        .minOfUppercase(1)
+        .minOfNumeric(1)
         .minOfSpecialCharacters(1)
         .noWhiteSpaces()
         .required(),
-    roleId: joi_1.default.forbidden()
+    roleId: joi_1.default.forbidden(),
 });
 exports.default = UserModel;

@@ -70,7 +70,7 @@ function HomeGuest(): JSX.Element {
           <h1>Plan Your Vacation</h1>
           <br />
           <h3 className="text-muted">
-            Get an account today, follow your planned vacations.
+            Create your account and start planning your next vacation.
           </h3>
           <h3 className="text-muted">Enjoy and share with your friends.</h3>
           <br /> <br /> <br />

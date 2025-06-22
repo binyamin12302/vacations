@@ -99,3 +99,35 @@
 }
 
 
+.vacations-empty-state {
+  background: #f8f9fa;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(160, 160, 160, 0.07);
+  display: inline-block;
+  padding: 32px 36px 28px 36px;
+  margin: 30px auto;
+  min-width: 270px;
+  max-width: 370px;
+  transition: box-shadow 0.2s;
+}
+
+.vacations-empty-state svg {
+  margin-bottom: 8px;
+  width: 46px;
+  height: 46px;
+  opacity: 0.8;
+}
+
+.vacations-empty-state .display-6 {
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: #adb5bd;
+  margin-bottom: 6px;
+}
+
+.vacations-empty-state .sub-message {
+  color: #888;
+  font-size: 1.05rem;
+  margin-top: 8px;
+}
