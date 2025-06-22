@@ -18,6 +18,11 @@ _Use these credentials to log in as an administrator and explore management feat
 
 ⚡ Note: The first login or data fetch may take a few seconds, due to free-tier hosting (Render & Aiven) which may introduce a short delay after periods of inactivity.
 
+
+## 📸 Screenshot
+
+![Vacation Demo](https://api.pikwy.com/web/6857deca0f4bd449d4043967.jpg)
+
 ## 🧭 Features
 
 ### 👥 Users
@@ -87,9 +92,6 @@ _Use these credentials to log in as an administrator and explore management feat
 
 
 
-## 📸 Screenshot
-
-![Vacation Demo](https://api.pikwy.com/web/6857deca0f4bd449d4043967.jpg)
 
 ## 📁 Project Structure
 
